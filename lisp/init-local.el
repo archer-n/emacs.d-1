@@ -2,6 +2,7 @@
 ;;; Commentary:
 ;;; Code:
 
+
 ;;; theme
 (light)
 
@@ -12,6 +13,10 @@
   (setq-default org-agenda-files (list org-default-notes-file
                                        (concat org-directory "/gtd.org"))))
 
+
+;;; alter
+(with-eval-after-load 'alert
+  (setq-default alert-default-style 'libnotify))
 
 
 ;;; eglot
