@@ -55,5 +55,9 @@
                             (eglot-ensure)))
 
 
+
+;;; wechat mini program
+(require 'wxml-mode)
+
 (provide 'init-local)
 ;;; init-local.el ends here

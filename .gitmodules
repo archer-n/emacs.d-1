@@ -1,0 +1,3 @@
+[submodule "site-lisp/wxml-mode"]
+	path = site-lisp/wxml-mode
+	url = https://github.com/archer-n/wxml-mode.git
