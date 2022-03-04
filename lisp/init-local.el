@@ -7,6 +7,11 @@
 (light)
 
 
+;;; beancount
+(require 'beancount)
+(add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
+
+
 ;;; org
 (with-eval-after-load 'org
   (setq-default org-default-notes-file (concat org-directory "/inbox.org"))
