@@ -62,6 +62,10 @@
 (require-package 'eglot)
 (require 'eglot)
 
+;; c/c++
+(add-hook 'c-mode-hook 'eglot-ensure)
+(add-hook 'c++-mode-hook 'eglot-ensure)
+
 ;; js/ts
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'typescript-mode-hook 'eglot-ensure)
