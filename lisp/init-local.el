@@ -7,6 +7,11 @@
 (light)
 
 
+;;; consult
+(global-set-key (kbd "M-s /") 'consult-line)
+(global-set-key (kbd "M-s i") 'consult-imenu)
+
+
 ;;; beancount
 (require 'beancount)
 (add-to-list 'auto-mode-alist '("\\.beancount\\'" . beancount-mode))
