@@ -62,6 +62,10 @@
 (require-package 'eglot)
 (require 'eglot)
 
+;; Turn off flycheck when using eglot
+(add-hook 'eglot-managed-mode-hook (lambda ()
+                                     (flycheck-mode -1)))
+
 ;; c/c++
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
