@@ -63,6 +63,14 @@
   (setq-default alert-default-style 'libnotify))
 
 
+;; auto-save
+(require 'auto-save)
+(auto-save-enable)
+
+(setq auto-save-silent t)   ; quietly save
+(setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
+
+
 ;;; yasnippet
 (require-package 'yasnippet)
 ;; (require-package 'yasnippet-snippets)
