@@ -63,6 +63,17 @@
   (setq-default alert-default-style 'libnotify))
 
 
+;;; yasnippet
+(require-package 'yasnippet)
+;; (require-package 'yasnippet-snippets)
+(add-hook 'after-init-hook 'yas-global-mode)
+
+
+;;; web
+(require-package 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+
 ;;; eglot
 (require-package 'eglot)
 (require 'eglot)
@@ -75,10 +86,25 @@
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
+;; html
+;; TODO: report bugs to eglot
+;; FIX: Server initialization failure. https://github.com/vscode-langservers/vscode-html-languageserver-bin/issues/4
+(defclass fix-eglot-html (eglot-lsp-server) ()
+  :documentation "HTML Language Server.")
+
+(cl-defmethod eglot-initialization-options ((server fix-eglot-html))
+  "Initialization Options should be an option could be opt-out. "
+  )
+
+(add-to-list 'eglot-server-programs '((web-mode) . (fix-eglot-html "html-languageserver" "--stdio")))
+(add-hook 'web-mode-hook 'eglot-ensure)
+
+;; css
+(add-hook 'css-mode-hook 'eglot-ensure)
+
 ;; js/ts
 (add-hook 'js-mode-hook 'eglot-ensure)
 (add-hook 'typescript-mode-hook 'eglot-ensure)
-
 
 ;; java
 (defun my-eglot-eclipse-jdt-contact (interactive)
@@ -105,7 +131,6 @@
                             (setq-local c-basic-offset 2) ;; The indentation configuration
                             (setq-local tab-width 2) ;; The indentation configuration
                             (eglot-ensure)))
-
 
 
 ;;; wechat mini program
