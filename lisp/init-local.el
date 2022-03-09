@@ -94,7 +94,7 @@
 
 (cl-defmethod eglot-initialization-options ((server fix-eglot-html))
   "Initialization Options should be an option could be opt-out. "
-  )
+  nil)
 
 (add-to-list 'eglot-server-programs '((web-mode) . (fix-eglot-html "html-languageserver" "--stdio")))
 (add-hook 'web-mode-hook 'eglot-ensure)
