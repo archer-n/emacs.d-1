@@ -70,6 +70,10 @@
 (setq auto-save-silent t)   ; quietly save
 (setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
 
+;; When using auto-save, if the auto-clear blank mode is enabled,
+;; it will interfere with the current input. Turn it off here
+(remove-hook 'after-init-hook 'global-whitespace-cleanup-mode)
+
 
 ;;; yasnippet
 (require-package 'yasnippet)
