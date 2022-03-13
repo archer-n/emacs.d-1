@@ -84,6 +84,7 @@
 ;;; web
 (require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(setq web-mode-markup-indent-offset 2)
 
 
 ;;; eglot
@@ -99,17 +100,10 @@
 (add-hook 'c++-mode-hook 'eglot-ensure)
 
 ;; html
-;; TODO: report bugs to eglot
-;; FIX: Server initialization failure. https://github.com/vscode-langservers/vscode-html-languageserver-bin/issues/4
-(defclass fix-eglot-html (eglot-lsp-server) ()
-  :documentation "HTML Language Server.")
-
-(cl-defmethod eglot-initialization-options ((server fix-eglot-html))
-  "Initialization Options should be an option could be opt-out. "
-  nil)
-
-(add-to-list 'eglot-server-programs '((web-mode) . (fix-eglot-html "html-languageserver" "--stdio")))
-(add-hook 'web-mode-hook 'eglot-ensure)
+;; FIXME: Temporarily cannot complete js in html
+(when (fboundp 'web-mode)
+  (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
+  (add-hook 'web-mode-hook 'eglot-ensure))
 
 ;; css
 (add-hook 'css-mode-hook 'eglot-ensure)
