@@ -87,6 +87,11 @@
 (setq web-mode-markup-indent-offset 2)
 
 
+;;; wechat mini program
+(define-derived-mode wxml-mode web-mode "WXML")
+(add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
+
+
 ;;; eglot
 (require-package 'eglot)
 (require 'eglot)
@@ -98,6 +103,11 @@
 ;; c/c++
 (add-hook 'c-mode-hook 'eglot-ensure)
 (add-hook 'c++-mode-hook 'eglot-ensure)
+
+;; wxml
+(when (fboundp 'wxml-mode)
+  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
+  (add-hook 'wxml-mode-hook 'eglot-ensure))
 
 ;; html
 ;; FIXME: Temporarily cannot complete js in html
@@ -138,9 +148,6 @@
                             (setq-local tab-width 2) ;; The indentation configuration
                             (eglot-ensure)))
 
-
-;;; wechat mini program
-(require 'wxml-mode)
 
 (provide 'init-local)
 ;;; init-local.el ends here
