@@ -83,7 +83,8 @@
 
 ;;; web
 (require-package 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(define-derived-mode archer/web-mode web-mode "Web")
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . archer/web-mode))
 (setq web-mode-markup-indent-offset 2)
 
 
@@ -93,52 +94,56 @@
 
 
 ;;; eglot
-(require-package 'eglot)
-(require 'eglot)
+(when (require 'eglot nil t)
+  ;; c/c++
+  (add-hook 'c-mode-hook 'eglot-ensure)
+  (add-hook 'c++-mode-hook 'eglot-ensure)
 
-;; Turn off flycheck when using eglot
-(add-hook 'eglot-managed-mode-hook (lambda ()
-                                     (flycheck-mode -1)))
+  ;; wxml
+  (when (fboundp 'wxml-mode)
+    (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
+    (add-hook 'wxml-mode-hook 'eglot-ensure))
 
-;; c/c++
-(add-hook 'c-mode-hook 'eglot-ensure)
-(add-hook 'c++-mode-hook 'eglot-ensure)
+  ;; html
+  ;; FIXME: Temporarily cannot complete js in html
+  (when (fboundp 'archer/web-mode)
+    (add-to-list 'eglot-server-programs '(archer/web-mode . ("vscode-html-language-server" "--stdio")))
+    (add-hook 'web-mode-hook 'eglot-ensure))
 
-;; wxml
-(when (fboundp 'wxml-mode)
-  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
-  (add-hook 'wxml-mode-hook 'eglot-ensure))
+  ;; css
+  (add-hook 'css-mode-hook 'eglot-ensure)
 
-;; html
-;; FIXME: Temporarily cannot complete js in html
-(when (fboundp 'web-mode)
-  (add-to-list 'eglot-server-programs '((web-mode) . ("vscode-html-language-server" "--stdio")))
-  (add-hook 'web-mode-hook 'eglot-ensure))
+  ;; js/ts
+  (add-hook 'js-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-mode-hook 'eglot-ensure)
 
-;; css
-(add-hook 'css-mode-hook 'eglot-ensure)
+  ;; java
+  (defun eglot-java-workspace-dir ()
+    (let ((workspace (expand-file-name (md5 (project-root (eglot--current-project)))
+                                       (expand-file-name "~/.cache/eglot-eclipse-jdt-cache"))))
+      (unless (file-directory-p workspace)
+        (make-directory workspace t))
 
-;; js/ts
-(add-hook 'js-mode-hook 'eglot-ensure)
-(add-hook 'typescript-mode-hook 'eglot-ensure)
+      workspace))
 
-;; java
-(let ((lombok-jar-path (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar"))
-      (workspace
-       (expand-file-name (md5 (project-root (eglot--current-project)))
-                         (expand-file-name "~/.cache/eglot-eclipse-jdt-cache"))))
-  (unless (file-directory-p workspace)
-    (make-directory workspace t))
+  ;; The location of the data workspace needs to be specified, it cannot be placed in the default location in the project
+  (let ((lombok-jar-path (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar")))
+    (setcdr (assq 'java-mode eglot-server-programs)
+            (lambda (_)
+              (cons"jdtls"
+                   (list
+                    (concat "--jvm-arg=-javaagent:" lombok-jar-path)
+                    "-data" (eglot-java-workspace-dir))))))
 
-  (setcdr (assq 'java-mode eglot-server-programs) (list "jdtls" (concat "--jvm-arg=-javaagent:" lombok-jar-path) "-data" workspace)))
+  (add-hook 'java-mode-hook (lambda ()
+                              (setq-local c-basic-offset 2) ;; The indentation configuration
+                              (setq-local tab-width 2) ;; The indentation configuration
+                              (eglot-ensure)))
 
-(add-hook 'java-mode-hook (lambda ()
-                            (setq-local c-basic-offset 2) ;; The indentation configuration
-                            (setq-local tab-width 2) ;; The indentation configuration
-                            (eglot-ensure)))
+  ;; python
+  (add-hook 'python-mode-hook 'eglot-ensure))
 
-;; python
-(add-hook 'python-mode-hook 'eglot-ensure)
+
 
 (provide 'init-local)
 ;;; init-local.el ends here
