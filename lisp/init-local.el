@@ -77,7 +77,7 @@
 
 ;;; yasnippet
 (require-package 'yasnippet)
-;; (require-package 'yasnippet-snippets)
+(require-package 'yasnippet-snippets)
 (add-hook 'after-init-hook 'yas-global-mode)
 
 
@@ -91,7 +91,7 @@
 ;;; wechat mini program
 (define-derived-mode wxml-mode web-mode "WXML")
 (add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
-
+(add-to-list 'auto-mode-alist '("\\.wxss\\'" . css-mode))
 
 ;;; eglot
 (when (require 'eglot nil t)
