@@ -11,9 +11,12 @@
 (global-set-key (kbd "C-,") 'xref-find-references)
 
 
-;;; consult
+;;; minibuffer
 (global-set-key (kbd "M-s /") 'consult-line)
 (global-set-key (kbd "M-s i") 'consult-imenu)
+
+;; affe-grep query result is not complete, use the consult-grep instead
+(global-set-key (kbd "M-?") 'consult-grep)
 
 
 ;;; beancount
