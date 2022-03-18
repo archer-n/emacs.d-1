@@ -4,3 +4,12 @@
 [submodule "site-lisp/auto-save"]
 	path = site-lisp/auto-save
 	url = https://github.com/manateelazycat/auto-save.git
+[submodule "site-lisp/popweb"]
+	path = site-lisp/popweb
+	url = https://github.com/manateelazycat/popweb.git
+[submodule "site-lisp/company-english-helper"]
+	path = site-lisp/company-english-helper
+	url = https://github.com/manateelazycat/company-english-helper.git
+[submodule "site-lisp/insert-translated-name"]
+	path = site-lisp/insert-translated-name
+	url = https://github.com/manateelazycat/insert-translated-name.git

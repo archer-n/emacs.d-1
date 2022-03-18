@@ -211,7 +211,21 @@ For example: ((nil . ((miniprogram-mode . t))))"
   ;; python
   (add-hook 'python-mode-hook 'eglot-ensure))
 
+
+;;; english
+(add-to-list 'load-path (expand-file-name "site-lisp/popweb/extension/dict" user-emacs-directory))
 
+;; Chinese-English translation popup
+(require 'popweb-dict-bing) ; Translation using Bing
+(global-set-key (kbd "M-s l") 'popweb-dict-bing-pointer)
+
+;; This is english helper extension that base on Emacs company-mode.
+(require 'company-english-helper)
+
+;; Translate plug-in
+(require 'insert-translated-name)
+(setq insert-translated-name-translate-engine "youdao")
+(global-set-key (kbd "M-s n") 'insert-translated-name-insert)
 
 (provide 'init-local)
 ;;; init-local.el ends here
