@@ -162,6 +162,13 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (defun miniprogram-quick-layout-style ()
   (interactive)
   (miniprogram-layout-left-right ".wxml" ".wxss"))
+
+;;; java decompiler
+;; https://github.com/xiongtx/jdecomp
+(require-package 'jdecomp)
+(setq jdecomp-decompiler-type 'cfr)
+(setq jdecomp-decompiler-paths `((cfr . ,(expand-file-name "plugins/cfr-0.152.jar" user-emacs-directory))))
+(jdecomp-mode 1)
 
 
 ;;; eglot
