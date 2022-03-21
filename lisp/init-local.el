@@ -189,6 +189,62 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (add-hook 'typescript-mode-hook 'eglot-ensure)
 
   ;; java
+  ;; Realize the source jump
+  (defun eglot-java-handle-uri (fn url)
+    (if (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\.class\\?" url)
+        (eglot-java--resolve-uri url)
+      (funcall fn url)))
+
+  (defun eglot-java--ensure-dir (path)
+    "Ensure that directory PATH exists."
+    (unless (file-directory-p path)
+      (make-directory path t)))
+
+  (defun eglot-java--get-metadata-location (file-location)
+    "Given a FILE-LOCATION return the file containing the metadata for the file."
+    (format "%s.%s.metadata"
+            (file-name-directory file-location)
+            (file-name-base file-location)))
+
+  (defun eglot-java--get-filename (url)
+    "Get the name of the buffer calculating it based on URL."
+    (or (save-match-data
+          (when (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\.class\\?" url)
+            (format "%s.java"
+                    (replace-regexp-in-string "/" "." (match-string 2 url) t t))))
+        (-when-let ((_ file-name _ jar)
+                    (s-match
+                     "jdt://.*?/\\(.*?\\)\\?=\\(.*?\\)/.*/\\(.*\\)"
+                     (url-unhex-string url)))
+          (format "%s(%s)" file-name
+                  (->> jar
+                       (s-replace "/" "")
+                       (s-replace "\\" ""))))
+        (save-match-data
+          (when (string-match "chelib://\\(.*\\)" url)
+            (let ((matched (match-string 1 url)))
+              (replace-regexp-in-string (regexp-quote ".jar") "jar" matched t t))))
+        (error "Unable to match %s" url)))
+
+  (defun eglot-java--resolve-uri (uri)
+    "Load a file corresponding to URI executing request to the jdt server."
+    (let* ((buffer-name (eglot-java--get-filename uri))
+           (file-location (concat (eglot-java-workspace-dir) "/jdt.ls-java-project/src/" buffer-name)))
+      (unless (file-readable-p file-location)
+        (eglot-java--ensure-dir (file-name-directory file-location))
+        (let ((content (jsonrpc-request
+                        (eglot--current-server-or-lose)
+                        :java/classFileContents
+                        (list :uri uri))))
+          (with-temp-file file-location
+            (insert content))
+          (with-temp-file (eglot-java--get-metadata-location file-location)
+            (insert uri))
+          ))
+      file-location))
+
+  (advice-add 'eglot--uri-to-path :around #'eglot-java-handle-uri)
+
   (defun eglot-java-workspace-dir ()
     (let ((workspace (expand-file-name (md5 (project-root (eglot--current-project)))
                                        (expand-file-name "~/.cache/eglot-eclipse-jdt-cache"))))
@@ -197,14 +253,25 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
       workspace))
 
-  ;; The location of the data workspace needs to be specified, it cannot be placed in the default location in the project
-  (let ((lombok-jar-path (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar")))
-    (setcdr (assq 'java-mode eglot-server-programs)
-            (lambda (_)
-              (cons"jdtls"
-                   (list
-                    (concat "--jvm-arg=-javaagent:" lombok-jar-path)
-                    "-data" (eglot-java-workspace-dir))))))
+  (add-to-list 'eglot-server-programs '(java-mode . eglot--eclipse-jdt-contact))
+
+  (defun eglot--eclipse-jdt-contact (interactive)
+    "Return cons (CLASS . ARGS) for connecting to Eclipse JDT.
+If INTERACTIVE, prompt user for details."
+    (let ((lombok-jar-path (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar")))
+      (cons 'eglot-eclipse-jdt
+            (list
+             "jdtls"
+             (concat "--jvm-arg=-javaagent:" lombok-jar-path)
+             "-data" (eglot-java-workspace-dir)))))
+
+  ;; Define said class and its methods
+  (defclass eglot-eclipse-jdt (eglot-lsp-server) ()
+    :documentation "Eclipse's Java Development Tools Language Server.")
+
+  (cl-defmethod eglot-initialization-options ((server eglot-eclipse-jdt))
+    "Passes through required JDT initialization options."
+    `(:extendedClientCapabilities (:classFileContentsSupport t)))
 
   (add-hook 'java-mode-hook (lambda ()
                               (setq-local c-basic-offset 2) ;; The indentation configuration
