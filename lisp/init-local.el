@@ -282,7 +282,9 @@ If INTERACTIVE, prompt user for details."
 
   (cl-defmethod eglot-initialization-options ((server eglot-eclipse-jdt))
     "Passes through required JDT initialization options."
-    `(:extendedClientCapabilities (:classFileContentsSupport t)))
+    `(
+      :settings (:java (:completion (:importOrder ["java" "javax" "com" "org"])))
+      :extendedClientCapabilities (:classFileContentsSupport t)))
 
   (add-hook 'java-mode-hook (lambda ()
                               (setq-local c-basic-offset 2) ;; The indentation configuration
