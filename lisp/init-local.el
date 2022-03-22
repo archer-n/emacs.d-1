@@ -171,6 +171,10 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (jdecomp-mode 1)
 
 
+;;; maven
+(require-package 'mvn)
+
+
 ;;; eglot
 (when (require 'eglot nil t)
   ;; c/c++
