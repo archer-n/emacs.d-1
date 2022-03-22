@@ -202,7 +202,8 @@ For example: ((nil . ((miniprogram-mode . t))))"
   ;; java
   ;; Realize the source jump
   (defun eglot-java-handle-uri (fn url)
-    (if (string-match "jdt://contents/\\(.*?\\)/\\(.*\\)\.class\\?" url)
+    (if (and (stringp url)
+             (numberp (string-match-p "^jdt://" url)))
         (eglot-java--resolve-uri url)
       (funcall fn url)))
 
@@ -253,7 +254,6 @@ For example: ((nil . ((miniprogram-mode . t))))"
             (insert uri))
           ))
       file-location))
-
   (advice-add 'eglot--uri-to-path :around #'eglot-java-handle-uri)
 
   (defun eglot-java-workspace-dir ()
