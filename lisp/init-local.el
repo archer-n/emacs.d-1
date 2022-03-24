@@ -262,7 +262,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (defun eglot-java--resolve-uri (uri)
     "Load a file corresponding to URI executing request to the jdt server."
     (let* ((buffer-name (eglot-java--get-filename uri))
-           (file-location (concat (eglot-java-workspace-dir) "/jdt.ls-java-project/src/" buffer-name)))
+           (file-location (concat (expand-file-name (project-root (eglot--current-project))) "workspace/jdt.ls-java-project/src/" buffer-name)))
       (unless (file-readable-p file-location)
         (eglot-java--ensure-dir (file-name-directory file-location))
         (let ((content (jsonrpc-request
