@@ -295,7 +295,9 @@ If INTERACTIVE, prompt user for details."
             (list
              "jdtls"
              (concat "--jvm-arg=-javaagent:" lombok-jar-path)
-             "-data" (eglot-java-workspace-dir)))))
+             "-configuration" (expand-file-name "~/.cache/jdtls")
+             "-data" (eglot-java-workspace-dir)
+             ))))
 
   ;; Define said class and its methods
   (defclass eglot-eclipse-jdt (eglot-lsp-server) ()
