@@ -332,6 +332,48 @@ If INTERACTIVE, prompt user for details."
   (add-hook 'python-mode-hook 'eglot-ensure))
 
 
+(define-derived-mode volar-api-mode web-mode "volar-api")
+(add-to-list 'auto-mode-alist '("\\.vue?\\'" . volar-api-mode))
+(add-hook 'volar-api-mode-hook 'eglot-ensure)
+
+
+(add-to-list 'eglot-server-programs '(volar-api-mode . (eglot-volar-api "volar-server" "--stdio")))
+
+(defclass eglot-volar-api (eglot-lsp-server) ()
+  :documentation "volar-api")
+
+(cl-defmethod eglot-initialization-options ((server eglot-volar-api))
+  "Passes through required cquery initialization options"
+  `(
+    :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.9.0/lib/node_modules/typescript/lib/tsserverlibrary.js"))
+    :languageFeatures (
+                       :references t
+                       :implementation t
+                       :definition t
+                       :typeDefinition t
+                       :rename t
+                       :renameFileRefactoring t
+                       :signatureHelp t
+                       :codeAction t
+                       :workspaceSymbol t
+                       :completion (
+                                    :defaultTagNameCase "both"
+                                    :defaultAttrNameCase "kebabCase"
+                                    :getDocumentNameCasesRequest :json-false
+                                    :getDocumentSelectionRequest :json-false
+                                    )
+                       :schemaRequestService (:getDocumentContentRequest :json-false)
+                       )
+    :documentFeatures (
+                       :selectionRange t
+                       :foldingRange t
+                       :linkedEditingRange t
+                       :documentSymbol t
+                       :documentColor t
+                       )))
+
+
+
 ;;; english
 (add-to-list 'load-path (expand-file-name "site-lisp/popweb/extension/dict" user-emacs-directory))
 
