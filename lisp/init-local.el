@@ -116,10 +116,17 @@
 (add-hook 'after-init-hook 'yas-global-mode)
 
 
+;;; typescript
+(add-hook 'typescript-mode-hook (lambda ()
+                                  (setq-local typescript-indent-level 2)
+                                  (setq-local tab-width 2)))
+
+
 ;;; web
 (require-package 'web-mode)
 (define-derived-mode archer/web-mode web-mode "Web")
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . archer/web-mode))
+
 (setq web-mode-markup-indent-offset 2)
 
 
