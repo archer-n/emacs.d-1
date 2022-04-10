@@ -4,7 +4,7 @@
 
 
 ;;; theme
-(light)
+(setq-default custom-enabled-themes nil)
 
 
 ;; xref
