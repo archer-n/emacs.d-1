@@ -337,7 +337,7 @@ If INTERACTIVE, prompt user for details."
 (add-hook 'volar-api-mode-hook 'eglot-ensure)
 
 
-(add-to-list 'eglot-server-programs '(volar-api-mode . (eglot-volar-api "volar-server" "--stdio")))
+(add-to-list 'eglot-server-programs '(volar-api-mode . (eglot-volar-api "vue-language-server" "--stdio")))
 
 (defclass eglot-volar-api (eglot-lsp-server) ()
   :documentation "volar-api")
