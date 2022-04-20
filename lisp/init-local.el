@@ -113,6 +113,30 @@
 (add-hook 'after-init-hook 'yas-global-mode)
 
 
+;;; javascript
+(add-hook 'js-mode-hook
+          (lambda ()
+            (setq-local js-indent-level 2)
+            (setq-local tab-width 2)))
+
+;; Enable eslint
+(add-hook 'eglot-managed-mode-hook
+          (lambda ()
+            (if (derived-mode-p 'js-mode)
+                (setq-local flymake-diagnostic-functions
+                            (list (flymake-flycheck-diagnostic-function-for 'javascript-eslint))))))
+
+(defun archer/eslint-fix-current-file ()
+  (interactive)
+  (when (fboundp 'projectile-mode)
+    (projectile-with-default-dir (projectile-acquire-root)
+      (save-excursion
+        (let ((command (concat "npx eslint --fix " (buffer-file-name))))
+          (message command)
+          (shell-command command))
+        (revert-buffer t t)))))
+
+
 ;;; typescript
 (add-hook 'typescript-mode-hook (lambda ()
                                   (setq-local typescript-indent-level 2)
