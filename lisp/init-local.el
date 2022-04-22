@@ -4,7 +4,7 @@
 
 
 ;;; theme
-(setq-default custom-enabled-themes nil)
+;;(setq-default custom-enabled-themes nil)
 
 
 ;; xref
@@ -105,6 +105,12 @@
 ;; When using auto-save, if the auto-clear blank mode is enabled,
 ;; it will interfere with the current input. Turn it off here
 (remove-hook 'after-init-hook 'global-whitespace-cleanup-mode)
+
+
+;; Shut down automatically saved when editing a remote file
+(setq auto-save-disable-predicates
+      '((lambda ()
+          (file-remote-p (buffer-file-name)))))
 
 
 ;;; yasnippet
