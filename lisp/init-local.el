@@ -14,6 +14,7 @@
 ;;; minibuffer
 (global-set-key (kbd "M-s /") 'consult-line)
 (global-set-key (kbd "M-s i") 'consult-imenu)
+(global-set-key (kbd "M-?") 'consult-grep)
 
 
 ;;; org
