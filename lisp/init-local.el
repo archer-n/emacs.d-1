@@ -4,7 +4,7 @@
 
 
 ;;; theme
-;;(setq-default custom-enabled-themes nil)
+(setq-default custom-enabled-themes nil)
 
 
 ;; xref
