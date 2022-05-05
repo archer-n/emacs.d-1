@@ -373,7 +373,7 @@ If INTERACTIVE, prompt user for details."
 (cl-defmethod eglot-initialization-options ((server eglot-volar-api))
   "Passes through required cquery initialization options"
   `(
-    :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.9.0/lib/node_modules/typescript/lib/tsserverlibrary.js"))
+    :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.14.2/lib/node_modules/typescript/lib/tsserverlibrary.js"))
     :languageFeatures (
                        :references t
                        :implementation t
