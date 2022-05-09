@@ -391,13 +391,6 @@ If INTERACTIVE, prompt user for details."
                                     :getDocumentSelectionRequest :json-false
                                     )
                        :schemaRequestService (:getDocumentContentRequest :json-false)
-                       )
-    :documentFeatures (
-                       :selectionRange t
-                       :foldingRange t
-                       :linkedEditingRange t
-                       :documentSymbol t
-                       :documentColor t
                        )))
 
 
