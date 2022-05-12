@@ -238,6 +238,25 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (require-package 'mvn)
 
 
+;;; lsp-bridge
+(require-package 'all-the-icons)
+(require 'lsp-bridge)
+(require 'lsp-bridge-orderless)   ;; make lsp-bridge support fuzzy match, optional
+(require 'lsp-bridge-icon)        ;; show icon for completion items, optional
+
+;; (setq lsp-bridge-enable-debug t)
+;; (setq lsp-bridge-enable-log t)
+
+;; Enable lsp-bridge.
+(dolist (hook (list
+               'python-mode-hook
+               ))
+  (add-hook hook (lambda ()
+                   (setq-local corfu-auto nil) ;; let lsp-bridge control when popup completion frame
+                   (lsp-bridge-mode t)
+                   )))
+
+
 ;;; eglot
 (when (require 'eglot nil t)
   ;; c/c++
@@ -357,7 +376,8 @@ If INTERACTIVE, prompt user for details."
                               (eglot-ensure)))
 
   ;; python
-  (add-hook 'python-mode-hook 'eglot-ensure))
+  ;; (add-hook 'python-mode-hook 'eglot-ensure)
+  )
 
 
 (define-derived-mode volar-api-mode web-mode "volar-api")

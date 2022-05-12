@@ -13,3 +13,6 @@
 [submodule "site-lisp/insert-translated-name"]
 	path = site-lisp/insert-translated-name
 	url = https://github.com/manateelazycat/insert-translated-name.git
+[submodule "site-lisp/lsp-bridge"]
+	path = site-lisp/lsp-bridge
+	url = git@github.com:archer-n/lsp-bridge.git
