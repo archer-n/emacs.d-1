@@ -98,10 +98,10 @@
 
 ;; auto-save
 (require 'auto-save)
-(auto-save-enable)
-
+(setq auto-save-idle 10)
 (setq auto-save-silent t)   ; quietly save
 (setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
+(auto-save-enable)
 
 ;; When using auto-save, if the auto-clear blank mode is enabled,
 ;; it will interfere with the current input. Turn it off here
@@ -244,12 +244,19 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (require 'lsp-bridge-orderless)   ;; make lsp-bridge support fuzzy match, optional
 (require 'lsp-bridge-icon)        ;; show icon for completion items, optional
 
+(with-eval-after-load 'lsp-bridge
+  (define-key lsp-bridge-mode-map (kbd "M-.") 'lsp-bridge-find-def)
+  (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def))
+
+
 ;; (setq lsp-bridge-enable-debug t)
 ;; (setq lsp-bridge-enable-log t)
 
 ;; Enable lsp-bridge.
 (dolist (hook (list
                'python-mode-hook
+               'js-mode-hook
+               'typescript-mode-hook
                ))
   (add-hook hook (lambda ()
                    (setq-local corfu-auto nil) ;; let lsp-bridge control when popup completion frame
@@ -278,8 +285,8 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (add-hook 'css-mode-hook 'eglot-ensure)
 
   ;; js/ts
-  (add-hook 'js-mode-hook 'eglot-ensure)
-  (add-hook 'typescript-mode-hook 'eglot-ensure)
+  ;; (add-hook 'js-mode-hook 'eglot-ensure)
+  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
 
   ;; java
   ;; Realize the source jump
