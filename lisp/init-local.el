@@ -98,7 +98,6 @@
 
 ;; auto-save
 (require 'auto-save)
-(setq auto-save-idle 10)
 (setq auto-save-silent t)   ; quietly save
 (setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
 (auto-save-enable)
@@ -246,8 +245,8 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 (with-eval-after-load 'lsp-bridge
   (define-key lsp-bridge-mode-map (kbd "M-.") 'lsp-bridge-find-def)
-  (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def))
-
+  (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def)
+  (define-key lsp-bridge-mode-map (kbd "C-,") 'lsp-bridge-find-references))
 
 ;; (setq lsp-bridge-enable-debug t)
 ;; (setq lsp-bridge-enable-log t)
