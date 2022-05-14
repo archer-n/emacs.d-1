@@ -18,7 +18,6 @@
 
 
 ;;; org
-
 (defun archer/org-babel-execute-src-block (&optional _arg info _params)
   "Load language if needed"
   (let* ((lang (nth 0 info))
@@ -106,7 +105,6 @@
 ;; it will interfere with the current input. Turn it off here
 (remove-hook 'after-init-hook 'global-whitespace-cleanup-mode)
 
-
 ;; Shut down automatically saved when editing a remote file
 (setq auto-save-disable-predicates
       '((lambda ()
@@ -124,13 +122,6 @@
           (lambda ()
             (setq-local js-indent-level 2)
             (setq-local tab-width 2)))
-
-;; Enable eslint
-(add-hook 'eglot-managed-mode-hook
-          (lambda ()
-            (if (derived-mode-p 'js-mode)
-                (setq-local flymake-diagnostic-functions
-                            (list (flymake-flycheck-diagnostic-function-for 'javascript-eslint))))))
 
 (defun archer/eslint-fix-current-file ()
   (interactive)
@@ -150,18 +141,13 @@
 
 
 ;;; web
-(require-package 'web-mode)
-(define-derived-mode archer/web-mode web-mode "Web")
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . archer/web-mode))
-
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.wxml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (setq web-mode-markup-indent-offset 2)
 
 
 ;;; wechat mini program
-(define-derived-mode wxml-mode web-mode "WXML")
-(add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
-(add-to-list 'auto-mode-alist '("\\.wxss\\'" . css-mode))
-
 ;; miniprogram-mode
 (defvar miniprogram-mode-map
   (let ((map (make-sparse-keymap)))
@@ -239,6 +225,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 ;;; lsp-bridge
 (require-package 'all-the-icons)
+(require-package 'posframe)
 (require 'lsp-bridge)
 (require 'lsp-bridge-orderless)   ;; make lsp-bridge support fuzzy match, optional
 (require 'lsp-bridge-icon)        ;; show icon for completion items, optional
@@ -248,12 +235,13 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def)
   (define-key lsp-bridge-mode-map (kbd "C-,") 'lsp-bridge-find-references))
 
-;; (setq lsp-bridge-enable-debug t)
-;; (setq lsp-bridge-enable-log t)
+(setq lsp-bridge-enable-debug nil)
+(setq lsp-bridge-enable-log t)
 
 ;; Enable lsp-bridge.
 (dolist (hook (list
                'python-mode-hook
+               'web-mode-hook
                'js-mode-hook
                'typescript-mode-hook
                ))
@@ -269,23 +257,8 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (add-hook 'c-mode-hook 'eglot-ensure)
   (add-hook 'c++-mode-hook 'eglot-ensure)
 
-  ;; wxml
-  (when (fboundp 'wxml-mode)
-    (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
-    (add-hook 'wxml-mode-hook 'eglot-ensure))
-
-  ;; html
-  ;; FIXME: Temporarily cannot complete js in html
-  (when (fboundp 'archer/web-mode)
-    (add-to-list 'eglot-server-programs '(archer/web-mode . ("vscode-html-language-server" "--stdio")))
-    (add-hook 'web-mode-hook 'eglot-ensure))
-
   ;; css
   (add-hook 'css-mode-hook 'eglot-ensure)
-
-  ;; js/ts
-  ;; (add-hook 'js-mode-hook 'eglot-ensure)
-  ;; (add-hook 'typescript-mode-hook 'eglot-ensure)
 
   ;; java
   ;; Realize the source jump
@@ -381,44 +354,7 @@ If INTERACTIVE, prompt user for details."
                               (setq-local tab-width 2) ;; The indentation configuration
                               (eglot-ensure)))
 
-  ;; python
-  ;; (add-hook 'python-mode-hook 'eglot-ensure)
   )
-
-
-(define-derived-mode volar-api-mode web-mode "volar-api")
-(add-to-list 'auto-mode-alist '("\\.vue?\\'" . volar-api-mode))
-(add-hook 'volar-api-mode-hook 'eglot-ensure)
-
-
-(add-to-list 'eglot-server-programs '(volar-api-mode . (eglot-volar-api "vue-language-server" "--stdio")))
-
-(defclass eglot-volar-api (eglot-lsp-server) ()
-  :documentation "volar-api")
-
-(cl-defmethod eglot-initialization-options ((server eglot-volar-api))
-  "Passes through required cquery initialization options"
-  `(
-    :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.14.2/lib/node_modules/typescript/lib/tsserverlibrary.js"))
-    :languageFeatures (
-                       :references t
-                       :implementation t
-                       :definition t
-                       :typeDefinition t
-                       :rename t
-                       :renameFileRefactoring t
-                       :signatureHelp t
-                       :codeAction t
-                       :workspaceSymbol t
-                       :completion (
-                                    :defaultTagNameCase "both"
-                                    :defaultAttrNameCase "kebabCase"
-                                    :getDocumentNameCasesRequest :json-false
-                                    :getDocumentSelectionRequest :json-false
-                                    )
-                       :schemaRequestService (:getDocumentContentRequest :json-false)
-                       )))
-
 
 
 ;;; english
