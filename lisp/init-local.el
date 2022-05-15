@@ -232,11 +232,15 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 (with-eval-after-load 'lsp-bridge
   (define-key lsp-bridge-mode-map (kbd "M-.") 'lsp-bridge-find-def)
+  (define-key lsp-bridge-mode-map (kbd "C-x 4 .") 'lsp-bridge-find-def-other-window)
   (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def)
-  (define-key lsp-bridge-mode-map (kbd "C-,") 'lsp-bridge-find-references))
+  (define-key lsp-bridge-mode-map (kbd "C-.") 'lsp-bridge-find-impl)
+  (define-key lsp-bridge-mode-map (kbd "C-x 4 ,") 'lsp-bridge-find-impl-other-window)
+  (define-key lsp-bridge-mode-map (kbd "C-,") 'lsp-bridge-find-references)
+  (define-key lsp-bridge-mode-map (kbd "C-c h") 'lsp-bridge-lookup-documentation))
 
 (setq lsp-bridge-enable-debug nil)
-(setq lsp-bridge-enable-log t)
+(setq lsp-bridge-enable-log nil)
 
 ;; Enable lsp-bridge.
 (dolist (hook (list
