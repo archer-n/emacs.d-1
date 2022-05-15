@@ -120,6 +120,8 @@
 ;;; javascript
 (add-hook 'js-mode-hook
           (lambda ()
+            (setq-local flymake-diagnostic-functions
+                        (list (flymake-flycheck-diagnostic-function-for 'javascript-eslint)))
             (setq-local js-indent-level 2)
             (setq-local tab-width 2)))
 
