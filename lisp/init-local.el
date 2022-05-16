@@ -143,6 +143,7 @@
 
 
 ;;; web
+(require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.wxml\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
@@ -223,27 +224,6 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 ;;; maven
 (require-package 'mvn)
-
-
-;;; lsp-bridge
-(require-package 'all-the-icons)
-(require-package 'posframe)
-(require 'lsp-bridge)
-(require 'lsp-bridge-orderless)   ;; make lsp-bridge support fuzzy match, optional
-(require 'lsp-bridge-icon)        ;; show icon for completion items, optional
-
-(with-eval-after-load 'lsp-bridge
-  (define-key lsp-bridge-mode-map (kbd "M-.") 'lsp-bridge-find-def)
-  (define-key lsp-bridge-mode-map (kbd "C-x 4 .") 'lsp-bridge-find-def-other-window)
-  (define-key lsp-bridge-mode-map (kbd "M-,") 'lsp-bridge-return-from-def)
-  (define-key lsp-bridge-mode-map (kbd "C-.") 'lsp-bridge-find-impl)
-  (define-key lsp-bridge-mode-map (kbd "C-x 4 ,") 'lsp-bridge-find-impl-other-window)
-  (define-key lsp-bridge-mode-map (kbd "C-,") 'lsp-bridge-find-references)
-  (define-key lsp-bridge-mode-map (kbd "C-c h") 'lsp-bridge-lookup-documentation))
-
-(setq lsp-bridge-enable-debug nil)
-(setq lsp-bridge-enable-log nil)
-(global-lsp-bridge-mode)
 
 
 ;;; english

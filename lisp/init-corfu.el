@@ -1,21 +1,22 @@
-;;; init-corfu.el --- Completion with corfu -*- lexical-binding: t -*-
+;;; init-corfu.el --- Completion Overlay Region FUnction  -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
-
 (require-package 'corfu)
 (require-package 'cape)
 (require 'corfu-history)
 (require 'corfu-info)
 (require 'corfu-quick)
 
-(global-corfu-mode)
-(setq tab-always-indent 'complete)
+(setq corfu-auto-prefix 0)
 (setq corfu-auto t)
 
-(require-package 'dabbrev)
-(global-set-key (kbd "M-/") 'dabbrev-completion)
-(with-eval-after-load 'dabbrev
-  (setq dabbrev-ignored-buffer-regexps '("\\.\\(?:pdf\\|jpe?g\\|png\\)\\'")))
+;; 默认用这三个补全后端
+(add-to-list 'completion-at-point-functions #'cape-symbol)
+(add-to-list 'completion-at-point-functions #'cape-file)
+(add-to-list 'completion-at-point-functions #'cape-dabbrev)
+
+;; 全局开启补全
+(global-corfu-mode)
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
