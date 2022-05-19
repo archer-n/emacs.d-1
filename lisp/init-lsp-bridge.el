@@ -9,6 +9,7 @@
 (require 'lsp-bridge)
 (require 'lsp-bridge-orderless) ;; make lsp-bridge support fuzzy match, optional
 (require 'lsp-bridge-icon) ;; show icon for completion items, optional
+(require 'lsp-bridge-jdtls)
 
 ;; 打开日志，开发者才需要
 ;; (setq lsp-bridge-enable-log t)
