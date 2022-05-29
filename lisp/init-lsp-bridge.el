@@ -10,9 +10,11 @@
 (require 'lsp-bridge-orderless) ;; make lsp-bridge support fuzzy match, optional
 (require 'lsp-bridge-icon) ;; show icon for completion items, optional
 (require 'lsp-bridge-jdtls)
+(setq lsp-bridge-enable-auto-import t)
+(setq lsp-bridge-jdtls-jvm-args `(,(concat "-javaagent:" (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar"))))
 
 ;; 打开日志，开发者才需要
-;; (setq lsp-bridge-enable-log t)
+(setq lsp-bridge-enable-log nil)
 
 ;; 通过Cape融合不同的补全后端，比如lsp-bridge、 tabnine、 file、 dabbrev.
 (defun lsp-bridge-mix-multi-backends ()

@@ -146,6 +146,7 @@
 (require-package 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.wxml\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.wxss\\'" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
 (setq web-mode-markup-indent-offset 2)
 
@@ -245,6 +246,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 ;;; plantuml
 (require-package 'plantuml-mode)
 (setq plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
+(setq org-plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
 (setq plantuml-default-exec-mode 'jar)
 (when (not (file-exists-p plantuml-jar-path))
   (require 'plantuml-mode)

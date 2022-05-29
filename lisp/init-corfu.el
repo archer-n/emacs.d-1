@@ -17,6 +17,7 @@
 
 ;; 全局开启补全
 (global-corfu-mode)
+(corfu-history-mode t)
 
 (provide 'init-corfu)
 ;;; init-corfu.el ends here
