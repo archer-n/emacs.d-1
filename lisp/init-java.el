@@ -113,5 +113,9 @@
                             (eglot-ensure)))
 
 
+;;; maven
+(require-package 'mvn)
+
+
 (provide 'init-java)
 ;;; init-java.el ends here
