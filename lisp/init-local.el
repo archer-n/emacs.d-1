@@ -5,6 +5,7 @@
 
 ;; yasnippet
 (require-package 'yasnippet)
+(require-package 'yasnippet-snippets)
 (add-hook 'after-init-hook 'yas-global-mode)
 
 
@@ -41,19 +42,22 @@
 ;;; javascript/typescript
 (add-hook 'js-mode-hook
           (lambda ()
-            (setq-local flymake-diagnostic-functions
-                        (list (flymake-flycheck-diagnostic-function-for 'javascript-eslint)))
             (setq-local js-indent-level 2)
-            (setq-local tab-width 2)))
+            (setq-local tab-width 2)
+            (eglot-ensure)))
+
+
+;; Enable eslint
+(add-hook 'eglot-managed-mode-hook
+          (lambda ()
+            (if (derived-mode-p 'js-mode)
+                (setq-local flymake-diagnostic-functions
+                            (list (flymake-flycheck-diagnostic-function-for 'javascript-eslint))))))
 
 (add-hook 'typescript-mode-hook (lambda ()
                                   (setq-local typescript-indent-level 2)
-                                  (setq-local tab-width 2)))
-
-(add-hook 'js-mode-hook 'eglot-ensure)
-
-(add-hook 'typescript-mode-hook 'eglot-ensure)
-
+                                  (setq-local tab-width 2)
+                                  (eglot-ensure)))
 
 (defun archer/eslint-fix-current-file ()
   (interactive)
@@ -64,6 +68,71 @@
           (message command)
           (shell-command command))
         (revert-buffer t t)))))
+
+
+;;; web
+(require-package 'web-mode)
+(require 'web-mode)
+
+(setq web-mode-markup-indent-offset 2)
+
+;; html
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+;; wechat miniprogram
+(define-derived-mode wxml-mode web-mode "WXML")
+(add-to-list 'auto-mode-alist '("\\.wxss\\'" . css-mode))
+(add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio"))))
+
+
+(add-hook 'wxml-mode-hook 'eglot-ensure)
+(add-hook 'css-mode-hook 'eglot-ensure)
+
+;; vue
+(define-derived-mode vue-mode web-mode "Vue")
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+(add-hook 'vue-mode-hook 'eglot-ensure)
+
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '(vue-mode . (eglot-volar "vue-language-server" "--stdio")))
+  (defclass eglot-volar (eglot-lsp-server) ()
+    :documentation "volar")
+  (cl-defmethod eglot-initialization-options ((server eglot-volar))
+    "Passes through required cquery initialization options"
+    `(
+      :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.14.2/lib/node_modules/typescript/lib/tsserverlibrary.js"))
+      :languageFeatures (
+                         :references t
+                         :implementation t
+                         :definition t
+                         :typeDefinition t
+                         :rename t
+                         :renameFileRefactoring t
+                         :signatureHelp t
+                         :codeAction t
+                         :workspaceSymbol t
+                         :completion (
+                                      :defaultTagNameCase ""
+                                      :defaultAttrNameCase ""
+                                      :getDocumentNameCasesRequest :json-false
+                                      :getDocumentSelectionRequest :json-false)
+                         :schemaRequestService (:getDocumentContentRequest :json-false))
+      :documentFeatures (
+                         :selectionRange t,
+                         :foldingRange :json-false,
+                         :linkedEditingRange t,
+                         :documentSymbol t,
+                         :documentColor t,
+                         :documentFormatting (
+                                              :defaultPrintWidth 100
+                                              :getDocumentPrintWidthRequest :json-false)
+                         :defaultPrintWidth 100
+                         :getDocumentPrintWidthRequest :json-false))))
+
+
 
 
 (provide 'init-local)
