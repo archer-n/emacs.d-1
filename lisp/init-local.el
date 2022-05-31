@@ -20,6 +20,33 @@
 
 
 ;;; org
+
+;;; org
+(defun archer/org-babel-execute-src-block (&optional _arg info _params)
+  "Load language if needed"
+  (let* ((lang (nth 0 info))
+         (sym (if (member (downcase lang) '("c" "cpp" "c++")) 'C (intern lang)))
+         (backup-languages org-babel-load-languages))
+    ;; - (LANG . nil) 明确禁止的语言，不加载。
+    ;; - (LANG . t) 已加载过的语言，不重复载。
+    (unless (assoc sym backup-languages)
+      (condition-case err
+          (progn
+            (org-babel-do-load-languages 'org-babel-load-languages (list (cons sym t)))
+            (setq-default org-babel-load-languages (append (list (cons sym t)) backup-languages)))
+        (file-missing
+         (setq-default org-babel-load-languages backup-languages)
+         err)))))
+
+(advice-add 'org-babel-execute-src-block :before #'archer/org-babel-execute-src-block)
+
+;; Export pdf to support Chinese
+(with-eval-after-load 'org
+  (setq org-latex-pdf-process '("xelatex -interaction nonstopmode %f"
+                                "xelatex -interaction nonstopmode %f"))
+  (setq org-latex-default-packages-alist
+        (remove '("AUTO" "inputenc" t) org-latex-default-packages-alist)))
+
 (with-eval-after-load 'org
   (setq-default org-default-notes-file (concat org-directory "/inbox.org"))
   (setq-default org-agenda-files (list org-default-notes-file
