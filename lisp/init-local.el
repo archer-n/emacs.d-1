@@ -3,6 +3,10 @@
 ;;; Code:
 
 
+;; auto save
+(add-hook 'after-init-hook 'auto-save-visited-mode)
+
+
 ;; yasnippet
 (require-package 'yasnippet)
 (require-package 'yasnippet-snippets)
@@ -19,8 +23,6 @@
 (global-set-key (kbd "M-?") 'consult-grep)
 
 
-;;; org
-
 ;;; org
 (defun archer/org-babel-execute-src-block (&optional _arg info _params)
   "Load language if needed"
