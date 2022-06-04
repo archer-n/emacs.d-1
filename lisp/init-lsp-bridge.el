@@ -2,35 +2,15 @@
 ;;; Commentary:
 ;;; Code:
 
-(require-package 'all-the-icons)
-(require-package 'posframe)
-
-(require 'cape)
+(require 'yasnippet)
 (require 'lsp-bridge)
-(require 'lsp-bridge-orderless) ;; make lsp-bridge support fuzzy match, optional
-(require 'lsp-bridge-icon) ;; show icon for completion items, optional
-(require 'lsp-bridge-jdtls)
+(require 'lsp-bridge-jdtls)       ;; provide Java third-party library jump and -data directory support, optional
+
 (setq lsp-bridge-enable-auto-import t)
 (setq lsp-bridge-jdtls-jvm-args `(,(concat "-javaagent:" (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar"))))
 
 ;; 打开日志，开发者才需要
 (setq lsp-bridge-enable-log nil)
-
-;; 通过Cape融合不同的补全后端，比如lsp-bridge、 tabnine、 file、 dabbrev.
-(defun lsp-bridge-mix-multi-backends ()
-  (setq-local completion-category-defaults nil)
-  (setq-local completion-at-point-functions
-              (list
-               (cape-capf-buster
-                (cape-super-capf
-                 #'lsp-bridge-capf
-                 #'cape-file
-                 #'cape-dabbrev
-                 )
-                'equal)
-               )))
-
-(add-hook 'lsp-bridge-mode-hook 'lsp-bridge-mix-multi-backends)
 
 (with-eval-after-load 'lsp-bridge
   (define-key lsp-bridge-mode-map (kbd "M-.") 'lsp-bridge-find-def)
@@ -42,6 +22,10 @@
   (define-key lsp-bridge-mode-map (kbd "C-c h") 'lsp-bridge-lookup-documentation))
 
 (global-lsp-bridge-mode)
+
+(yas-global-mode 1)
+(global-lsp-bridge-mode)
+
 
 (provide 'init-lsp-bridge)
 ;;; init-lsp-bridge.el ends here
