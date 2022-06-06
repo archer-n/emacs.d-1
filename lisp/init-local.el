@@ -20,7 +20,11 @@
 ;;; minibuffer
 (global-set-key (kbd "M-s /") 'consult-line)
 (global-set-key (kbd "M-s i") 'consult-imenu)
-(global-set-key (kbd "M-?") 'consult-grep)
+
+
+;; separedit
+(require-package 'separedit)
+(define-key prog-mode-map        (kbd "C-c '") #'separedit)
 
 
 ;;; org
