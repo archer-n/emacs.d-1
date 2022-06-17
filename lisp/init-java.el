@@ -109,6 +109,7 @@
 
 (add-hook 'java-mode-hook (lambda ()
                             ;; Decompiled source files are placed in a directory outside the project
+                            (setq-local tab-width 4)
                             (setq-local eglot-extend-to-xref t)
                             (eglot-ensure)))
 

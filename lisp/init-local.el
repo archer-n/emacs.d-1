@@ -18,8 +18,11 @@
 
 
 ;;; minibuffer
+(require 'consult)
 (global-set-key (kbd "M-s /") 'consult-line)
 (global-set-key (kbd "M-s i") 'consult-imenu)
+(global-set-key (kbd "M-s r") 'consult-recent-file)
+
 
 
 ;; separedit
@@ -109,8 +112,7 @@
 
 (setq web-mode-markup-indent-offset 2)
 
-;; html
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 
 ;; wechat miniprogram
 (define-derived-mode wxml-mode web-mode "WXML")
@@ -118,9 +120,10 @@
 (add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio"))))
+  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
+  (add-to-list 'eglot-server-programs '(web-mode . ("vscode-html-language-server" "--stdio"))))
 
-
+(add-hook 'web-mode-hook 'eglot-ensure)
 (add-hook 'wxml-mode-hook 'eglot-ensure)
 (add-hook 'css-mode-hook 'eglot-ensure)
 
@@ -165,7 +168,10 @@
                          :defaultPrintWidth 100
                          :getDocumentPrintWidthRequest :json-false))))
 
-
+
+;;; dart
+(require-package 'dart-mode)
+(add-hook 'dart-mode-hook 'eglot-ensure)
 
 
 (provide 'init-local)
