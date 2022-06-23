@@ -78,6 +78,7 @@
 ;;; javascript/typescript
 (add-hook 'js-mode-hook
           (lambda ()
+            (setq-local js-switch-indent-offset 2)
             (setq-local js-indent-level 2)
             (setq-local tab-width 2)
             (eglot-ensure)))
@@ -120,12 +121,77 @@
 (add-to-list 'auto-mode-alist '("\\.wxml\\'" . wxml-mode))
 
 (with-eval-after-load 'eglot
-  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio")))
-  (add-to-list 'eglot-server-programs '(web-mode . ("vscode-html-language-server" "--stdio"))))
+  (add-to-list 'eglot-server-programs '(wxml-mode . ("wxml-langserver" "--stdio"))))
 
 (add-hook 'web-mode-hook 'eglot-ensure)
 (add-hook 'wxml-mode-hook 'eglot-ensure)
 (add-hook 'css-mode-hook 'eglot-ensure)
+
+
+;;; miniprogram-mode
+(defvar miniprogram-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "C-c C-l q") #'miniprogram-quick-layout)
+    (define-key map (kbd "C-c C-l c") #'miniprogram-quick-layout-code)
+    (define-key map (kbd "C-c C-l l") #'miniprogram-quick-layout-style)
+    (define-key map (kbd "C-c C-l j") #'miniprogram-quick-layout-config)
+    map)
+  "keymap while miniprogram-mode is active")
+
+(define-minor-mode miniprogram-mode
+  "Provides some auxiliary functions for WeChat minprogram.
+Add the code to enable miniprogram-mode in the .dir-locales.el file in the
+root directory of the miniprogram project.
+For example: ((nil . ((miniprogram-mode . t))))"
+
+  :lighter " mini"
+  :keymap miniprogram-mode-map)
+
+(defun miniprogram-find-file (ext-name)
+  (when (and (stringp ext-name)
+             (file-exists-p (concat (file-name-base (buffer-file-name)) ext-name)))
+    (find-file (concat (file-name-base (buffer-file-name)) ext-name))))
+
+(defun miniprogram-quick-layout ()
+  (interactive)
+  (delete-other-windows)
+  (let* ((left-top (selected-window))
+         (right-top (split-window-horizontally))
+         (left-bottom (split-window-vertically))
+         (_ (select-window right-top))
+         (right-bottom (split-window-vertically)))
+    (select-window left-top)
+    (miniprogram-find-file ".wxml")
+    (select-window right-top)
+    (miniprogram-find-file ".js")
+    (select-window left-bottom)
+    (miniprogram-find-file ".wxss")
+    (select-window right-bottom)
+    (miniprogram-find-file ".json")))
+
+;; A quick layout
+(defun miniprogram-layout-left-right (left-file-type right-file-type)
+  (delete-other-windows)
+  (let* ((left (selected-window))
+         (right (split-window-horizontally)))
+    (select-window left)
+    (miniprogram-find-file left-file-type)
+    (select-window right)
+    (miniprogram-find-file right-file-type)
+    (select-window right)))
+
+(defun miniprogram-quick-layout-config ()
+  (interactive)
+  (miniprogram-layout-left-right ".wxml" ".json"))
+
+(defun miniprogram-quick-layout-code ()
+  (interactive)
+  (miniprogram-layout-left-right ".wxml" ".js"))
+
+(defun miniprogram-quick-layout-style ()
+  (interactive)
+  (miniprogram-layout-left-right ".wxml" ".wxss"))
+
 
 ;; vue
 (define-derived-mode vue-mode web-mode "Vue")
@@ -172,6 +238,35 @@
 ;;; dart
 (require-package 'dart-mode)
 (add-hook 'dart-mode-hook 'eglot-ensure)
+
+
+;;; plantuml
+(require-package 'plantuml-mode)
+(setq plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
+(setq org-plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
+(setq plantuml-default-exec-mode 'jar)
+(when (not (file-exists-p plantuml-jar-path))
+  (require 'plantuml-mode)
+  (plantuml-download-jar))
+
+(maybe-require-package 'flycheck-plantuml)
+(flycheck-plantuml-setup)
+
+(defun company-plantuml (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+  (cl-case command
+    (interactive (company-begin-backend 'company-plantuml))
+    (prefix (let* ((symbol (company-grab-symbol))
+                   (max-match-result (try-completion symbol plantuml-kwdList)))
+              (if (length> max-match-result 0)
+                  symbol)))
+    (candidates (all-completions arg plantuml-kwdList))))
+
+(add-hook 'plantuml-mode-hook
+          (lambda ()
+            (setq-local company-backends '(company-plantuml
+                                           (company-dabbrev-code company-keywords)
+                                           company-dabbrev))))
 
 
 (provide 'init-local)
