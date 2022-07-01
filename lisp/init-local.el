@@ -22,6 +22,7 @@
 (global-set-key (kbd "M-s /") 'consult-line)
 (global-set-key (kbd "M-s i") 'consult-imenu)
 (global-set-key (kbd "M-s r") 'consult-recent-file)
+(global-set-key (kbd "M-?") 'consult-ripgrep)
 
 
 
@@ -59,7 +60,8 @@
 (with-eval-after-load 'org
   (setq-default org-default-notes-file (concat org-directory "/inbox.org"))
   (setq-default org-agenda-files (list org-default-notes-file
-                                       (concat org-directory "/gtd.org"))))
+                                       (concat org-directory "/gtd.org")
+                                       (concat org-directory "/notes.org"))))
 
 
 ;;; alter
@@ -76,6 +78,7 @@
 
 
 ;;; javascript/typescript
+
 (add-hook 'js-mode-hook
           (lambda ()
             (setq-local js-switch-indent-offset 2)
@@ -93,6 +96,7 @@
 
 (add-hook 'typescript-mode-hook (lambda ()
                                   (setq-local typescript-indent-level 2)
+                                  (setq-local tab-width 2)
                                   (setq-local tab-width 2)
                                   (eglot-ensure)))
 
@@ -196,7 +200,9 @@ For example: ((nil . ((miniprogram-mode . t))))"
 ;; vue
 (define-derived-mode vue-mode web-mode "Vue")
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-(add-hook 'vue-mode-hook 'eglot-ensure)
+(add-hook 'vue-mode-hook (lambda ()
+                           (setq-local tab-width 2)
+                           (eglot-ensure)))
 
 (with-eval-after-load 'eglot
   (add-to-list 'eglot-server-programs '(vue-mode . (eglot-volar "vue-language-server" "--stdio")))
