@@ -72,9 +72,9 @@
 
 ;;; eglot
 
+
 ;; don't use an event's buffer at all.
 (setq-default eglot-events-buffer-size 0)
-
 
 
 ;;; javascript/typescript
@@ -198,6 +198,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 
 ;; vue
+
 (define-derived-mode vue-mode web-mode "Vue")
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
 (add-hook 'vue-mode-hook (lambda ()
@@ -251,6 +252,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (setq plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
 (setq org-plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
 (setq plantuml-default-exec-mode 'jar)
+(setq plantuml-output-type "png")
 (when (not (file-exists-p plantuml-jar-path))
   (require 'plantuml-mode)
   (plantuml-download-jar))
