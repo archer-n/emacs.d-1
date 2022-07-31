@@ -111,8 +111,14 @@
                             ;; Decompiled source files are placed in a directory outside the project
                             (setq-local tab-width 4)
                             (setq-local eglot-extend-to-xref t)
-                            (eglot-ensure)))
+                            ;; (eglot-ensure)
+                            ))
 
+(with-eval-after-load 'lsp-bridge
+  (require 'lsp-bridge-jdtls)       ;; provide Java third-party library jump and -data directory support, optional
+  (setq lsp-bridge-jdtls-jvm-args `(,(concat "-javaagent:" (expand-file-name "~/.m2/repository/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar"))))
+  (add-hook 'java-mode-hook (lambda ()
+                              (lsp-bridge-mode 1))))
 
 ;;; maven
 (require-package 'mvn)
