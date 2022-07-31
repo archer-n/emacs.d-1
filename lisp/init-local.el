@@ -4,7 +4,19 @@
 
 
 ;; auto save
-(add-hook 'after-init-hook 'auto-save-visited-mode)
+(require 'auto-save)
+(setq auto-save-silent t)   ; quietly save
+(setq auto-save-delete-trailing-whitespace t)  ; automatically delete spaces at the end of the line when saving
+(auto-save-enable)
+
+;; When using auto-save, if the auto-clear blank mode is enabled,
+;; it will interfere with the current input. Turn it off here
+(remove-hook 'after-init-hook 'global-whitespace-cleanup-mode)
+
+;; Shut down automatically saved when editing a remote file
+(setq auto-save-disable-predicates
+      '((lambda ()
+          (file-remote-p (buffer-file-name)))))
 
 
 ;; yasnippet
