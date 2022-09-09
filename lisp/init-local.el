@@ -89,6 +89,10 @@
 (setq-default eglot-events-buffer-size 0)
 
 
+;;; python
+(add-hook 'python-mode-hook 'eglot-ensure)
+
+
 ;;; javascript/typescript
 
 (add-hook 'js-mode-hook
@@ -224,7 +228,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (cl-defmethod eglot-initialization-options ((server eglot-volar))
     "Passes through required cquery initialization options"
     `(
-      :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v16.14.2/lib/node_modules/typescript/lib/tsserverlibrary.js"))
+      :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/tsserverlibrary.js"))
       :languageFeatures (
                          :references t
                          :implementation t
@@ -259,6 +263,10 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (add-hook 'dart-mode-hook 'eglot-ensure)
 
 
+;;; kotlin
+(require-package 'kotlin-mode)
+
+
 ;;; plantuml
 (require-package 'plantuml-mode)
 (setq plantuml-jar-path (expand-file-name "~/.cache/plantuml/plantuml.jar"))
@@ -288,6 +296,17 @@ For example: ((nil . ((miniprogram-mode . t))))"
                                            (company-dabbrev-code company-keywords)
                                            company-dabbrev))))
 
+
+
+;;
+
+(require-package 'citre)
+(require 'citre)
+(require 'citre-config)
+(global-set-key (kbd "C-x c j") 'citre-jump)
+(global-set-key (kbd "C-x c J") 'citre-jump-back)
+(global-set-key (kbd "C-x c p") 'citre-ace-peek)
+(global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
 
 (provide 'init-local)
 ;;; init-local.el ends here
