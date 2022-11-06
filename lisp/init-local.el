@@ -133,7 +133,6 @@
 
 (setq web-mode-markup-indent-offset 2)
 
-(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
 
 ;; wechat miniprogram
 (define-derived-mode wxml-mode web-mode "WXML")
@@ -212,6 +211,11 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (interactive)
   (miniprogram-layout-left-right ".wxml" ".wxss"))
 
+;; html
+(define-derived-mode my-html-mode web-mode "Web")
+(add-to-list 'auto-mode-alist '("\\.html\\'" . my-html-mode))
+(with-eval-after-load 'eglot
+  (add-to-list 'eglot-server-programs '(my-html-mode . ("vscode-html-language-server" "--stdio"))))
 
 ;; vue
 
@@ -228,7 +232,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (cl-defmethod eglot-initialization-options ((server eglot-volar))
     "Passes through required cquery initialization options"
     `(
-      :typescript (:serverPath ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/tsserverlibrary.js"))
+      :typescript (:tsdk ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/"))
       :languageFeatures (
                          :references t
                          :implementation t
@@ -265,7 +269,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 ;;; kotlin
 (require-package 'kotlin-mode)
-
+(add-hook 'kotlin-mode-hook 'eglot-ensure)
 
 ;;; plantuml
 (require-package 'plantuml-mode)
@@ -307,6 +311,24 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (global-set-key (kbd "C-x c J") 'citre-jump-back)
 (global-set-key (kbd "C-x c p") 'citre-ace-peek)
 (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
+
+
+
+;; org-roam
+(require-package 'org-roam)
+(global-set-key (kbd "C-c n l") 'org-roam-buffer-toggle)
+(global-set-key (kbd "C-c n f") 'org-roam-node-find)
+(global-set-key (kbd "C-c n g") 'org-roam-graph)
+(global-set-key (kbd "C-c n i") 'org-roam-node-insert)
+(global-set-key (kbd "C-c n c") 'org-roam-capture)
+(global-set-key (kbd "C-c n j") 'org-roam-dailies-capture-today)
+
+;; If you're using a vertical completion framework, you might want a more informative completion interface
+(setq org-roam-node-display-template (concat "${title:*} " (propertize "${tags:10}" 'face 'org-tag)))
+(org-roam-db-autosync-mode)
+
+;; If using org-roam-protocol
+;; (require 'org-roam-protocol)
 
 (provide 'init-local)
 ;;; init-local.el ends here
