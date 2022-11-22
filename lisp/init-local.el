@@ -232,7 +232,9 @@ For example: ((nil . ((miniprogram-mode . t))))"
   (cl-defmethod eglot-initialization-options ((server eglot-volar))
     "Passes through required cquery initialization options"
     `(
-      :typescript (:tsdk ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/"))
+      :typescript (
+                   :serverPath ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/tsserverlibrary.js")
+                   :tsdk ,(expand-file-name "~/.nvm/versions/node/v18.7.0/lib/node_modules/typescript/lib/"))
       :languageFeatures (
                          :references t
                          :implementation t
