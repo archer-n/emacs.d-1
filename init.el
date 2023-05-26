@@ -52,7 +52,7 @@
 
 (require 'init-frame-hooks)
 (require 'init-xterm)
-;; (require 'init-themes)
+(require 'init-themes)
 (require 'init-osx-keys)
 (require 'init-gui-frames)
 (require 'init-dired)
@@ -79,7 +79,7 @@
 (require 'init-git)
 (require 'init-github)
 
-(require 'init-projectile)
+;;(require 'init-projectile)
 
 (require 'init-compile)
 (require 'init-crontab)
@@ -89,6 +89,7 @@
 (require 'init-erlang)
 (require 'init-javascript)
 (require 'init-java)
+(require 'init-android)
 (require 'init-php)
 (require 'init-org)
 (require 'init-nxml)

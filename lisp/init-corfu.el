@@ -29,5 +29,18 @@
   )
 
 
+(require-package 'cape)
+
+;; Merge the dabbrev, dict and keyword capfs, display candidates together.
+(with-eval-after-load 'citre
+  (add-hook 'citre-mode-hook (lambda ()
+                               (setq-local completion-at-point-functions
+                                           (list (cape-super-capf
+                                                  #'cape-dabbrev
+                                                  #'cape-keyword
+                                                  #'citre-completion-at-point
+                                                  ))))))
+
+
 (provide 'init-corfu)
 ;;; init-corfu.el ends here

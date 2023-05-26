@@ -268,12 +268,14 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 ;;; dart
 (require-package 'dart-mode)
+;;
 (add-hook 'dart-mode-hook 'eglot-ensure)
 
 
 ;;; kotlin
 (require-package 'kotlin-mode)
-(add-hook 'kotlin-mode-hook 'eglot-ensure)
+;; (add-hook 'kotlin-mode-hook 'eglot-ensure)
+
 
 ;;; plantuml
 (require-package 'plantuml-mode)
@@ -311,11 +313,27 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (require-package 'citre)
 (require 'citre)
 (require 'citre-config)
+(setq-default citre-enable-imenu-integration nil)
+(setq-default citre-enable-xref-integration nil)
 (global-set-key (kbd "C-x c j") 'citre-jump)
 (global-set-key (kbd "C-x c J") 'citre-jump-back)
 (global-set-key (kbd "C-x c p") 'citre-ace-peek)
 (global-set-key (kbd "C-x c u") 'citre-update-this-tags-file)
+(define-advice xref--create-fetcher (:around (-fn &rest -args) fallback)
+  (let ((fetcher (apply -fn -args))
+        (citre-fetcher
+         (let ((xref-backend-functions '(citre-xref-backend t)))
+           (apply -fn -args))))
+    (lambda ()
+      (or (with-demoted-errors "%s, fallback to citre"
+            (funcall fetcher))
+          (funcall citre-fetcher)))))
 
+
+
+;; citre-global
+;; https://github.com/universal-ctags/citre/blob/master/docs/user-manual/citre-global.md
+(setq xref-prompt-for-identifier nil)
 
 
 ;; org-roam
