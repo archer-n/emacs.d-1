@@ -84,6 +84,7 @@
 (require-package 'default-text-scale)
 (add-hook 'after-init-hook 'default-text-scale-mode)
 
+(set-face-attribute 'default nil :height 110)
 
 
 (require-package 'disable-mouse)

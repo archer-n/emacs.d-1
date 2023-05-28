@@ -10,7 +10,7 @@
 (setq custom-safe-themes t)
 
 ;; If you don't customize it, this is the theme you get.
-(setq-default custom-enabled-themes '(sanityinc-tomorrow-bright))
+(setq-default custom-enabled-themes '(sanityinc-solarized-dark))
 
 ;; Ensure that themes will be applied even if they have not been customized
 (defun reapply-themes ()
@@ -29,13 +29,13 @@
 (defun light ()
   "Activate a light color theme."
   (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-day))
+  (setq custom-enabled-themes '(sanityinc-solarized-light))
   (reapply-themes))
 
 (defun dark ()
   "Activate a dark color theme."
   (interactive)
-  (setq custom-enabled-themes '(sanityinc-tomorrow-bright))
+  (setq custom-enabled-themes '(sanityinc-solarized-dark))
   (reapply-themes))
 
 

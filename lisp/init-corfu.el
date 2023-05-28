@@ -6,10 +6,12 @@
 ;; TODO Default sort order should place [a-z] before punctuation
 
 (setq tab-always-indent 'complete)
+
 (when (maybe-require-package 'orderless)
   (with-eval-after-load 'vertico
     (require 'orderless)
     (setq completion-styles '(orderless basic))))
+
 (setq completion-category-defaults nil
       completion-category-overrides nil)
 (setq completion-cycle-threshold 4)
