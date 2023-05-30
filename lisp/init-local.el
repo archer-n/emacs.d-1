@@ -314,7 +314,8 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (require 'citre)
 (require 'citre-config)
 (setq-default citre-enable-imenu-integration nil)
-(setq-default citre-enable-xref-integration nil)
+(setq-default citre-auto-enable-citre-mode-modes '(java-mode kotlin-mode))
+;;(setq-default citre-enable-xref-integration nil)
 (global-set-key (kbd "C-x c j") 'citre-jump)
 (global-set-key (kbd "C-x c J") 'citre-jump-back)
 (global-set-key (kbd "C-x c p") 'citre-ace-peek)
@@ -328,7 +329,6 @@ For example: ((nil . ((miniprogram-mode . t))))"
       (or (with-demoted-errors "%s, fallback to citre"
             (funcall fetcher))
           (funcall citre-fetcher)))))
-
 
 
 ;; citre-global
