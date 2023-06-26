@@ -149,6 +149,13 @@
 (add-hook 'css-mode-hook 'eglot-ensure)
 
 
+;; react or react-native
+(define-derived-mode typescript-tsx-mode web-mode "TSX")
+(add-to-list 'auto-mode-alist '("\\.tsx?\\'" . typescript-tsx-mode))
+(add-to-list 'eglot-server-programs '(typescript-tsx-mode . ("typescript-language-server" "--stdio")))
+(add-hook 'tsx-mode-hook 'eglot-ensure)
+
+
 ;;; miniprogram-mode
 (defvar miniprogram-mode-map
   (let ((map (make-sparse-keymap)))
@@ -268,8 +275,10 @@ For example: ((nil . ((miniprogram-mode . t))))"
 
 ;;; dart
 (require-package 'dart-mode)
-;;
-(add-hook 'dart-mode-hook 'eglot-ensure)
+(add-hook 'dart-mode-hook (lambda ()
+                            (setq-local fill-column 120)
+                            (eglot-ensure)))
+
 
 
 ;;; kotlin
@@ -315,7 +324,7 @@ For example: ((nil . ((miniprogram-mode . t))))"
 (require 'citre-config)
 (setq-default citre-enable-imenu-integration nil)
 (setq-default citre-auto-enable-citre-mode-modes '(java-mode kotlin-mode))
-;;(setq-default citre-enable-xref-integration nil)
+(setq-default citre-enable-xref-integration nil)
 (global-set-key (kbd "C-x c j") 'citre-jump)
 (global-set-key (kbd "C-x c J") 'citre-jump-back)
 (global-set-key (kbd "C-x c p") 'citre-ace-peek)

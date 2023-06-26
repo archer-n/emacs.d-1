@@ -16,6 +16,9 @@
                                      (local-set-key (kbd "M-RET") #'eglot-code-actions)))
 
 
+;; dart
+(setq-default eglot-workspace-configuration
+              '(:dart (:lineLength 120)))
 
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
