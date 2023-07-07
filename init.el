@@ -85,6 +85,7 @@
 (require 'init-csv)
 (require 'init-dart)
 (require 'init-javascript)
+(require 'init-react)
 (require 'init-org)
 (require 'init-nxml)
 (require 'init-html)
