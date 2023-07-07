@@ -11,8 +11,9 @@
 (when (maybe-require-package 'eglot)
   (maybe-require-package 'consult-eglot))
 
-
-
+(with-eval-after-load 'eglot
+  (setq eglot-extend-to-xref t
+        eglot-events-buffer-size 0))
 
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
