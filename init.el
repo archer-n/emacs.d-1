@@ -93,6 +93,7 @@
 (require 'init-sql)
 (require 'init-toml)
 (require 'init-yaml)
+(require 'init-yasnippet)
 (maybe-require-package 'nginx-mode)
 
 (require 'init-paredit)
