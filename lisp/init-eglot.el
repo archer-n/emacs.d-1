@@ -15,5 +15,9 @@
   (setq eglot-extend-to-xref t
         eglot-events-buffer-size 0))
 
+
+(add-hook 'eglot-managed-mode-hook (lambda ()
+                                     (local-set-key (kbd "M-RET") #'eglot-code-actions)))
+
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
