@@ -19,5 +19,9 @@
 (add-hook 'eglot-managed-mode-hook (lambda ()
                                      (local-set-key (kbd "M-RET") #'eglot-code-actions)))
 
+
+(global-set-key (kbd "C-,") #'xref-find-references)
+
+
 (provide 'init-eglot)
 ;;; init-eglot.el ends here
