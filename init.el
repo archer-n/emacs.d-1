@@ -85,6 +85,7 @@
 (require 'init-csv)
 (require 'init-dart)
 (require 'init-java)
+(require 'init-kotlin)
 (require 'init-javascript)
 (require 'init-react)
 (require 'init-vue)
