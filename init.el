@@ -97,6 +97,7 @@
 (require 'init-sql)
 (require 'init-toml)
 (require 'init-yaml)
+(require 'init-plantuml)
 (require 'init-yasnippet)
 (maybe-require-package 'nginx-mode)
 
