@@ -70,26 +70,6 @@
   (+eglot/jdtls-uri-to-path uri))
 
 
-;;; Eglot handle (some) non standard LSP commands for java
-
-;; GNU Emacs 30.0.50 (build 3, x86_64-pc-linux-gnu, GTK+ Version 3.24.38, cairo version 1.17.8) of 2023-07-04
-(cl-defmethod eglot-execute (server action &context (major-mode java-mode))
-  (let* ((command (if (listp (plist-get action :command))
-                      (plist-get action :command)
-                    action))
-         (name (plist-get command :command))
-         (edit (aref (plist-get command :arguments) 0)))
-    (if (equal name "java.apply.workspaceEdit")
-        ;; handle java.apply.workspaceEdit
-        (eglot--apply-workspace-edit edit)
-      ;; fallback default implementation
-      (eglot--dcase action
-        (((Command)) (eglot--request server :workspace/executeCommand action))
-        (((CodeAction) edit command)
-         (when edit (eglot--apply-workspace-edit edit))
-         (when command (eglot--request server :workspace/executeCommand command)))))))
-
-
 (defun java-eglot-ensure ()
   (setq-local tab-width 4)
   (eglot-ensure))
