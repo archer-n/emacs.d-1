@@ -29,6 +29,9 @@
 
 (with-eval-after-load 'company
   (setq company-backends '((company-capf :with company-yasnippet :with company-dabbrev)))
+  (diminish 'company-mode)
+  (define-key company-mode-map [remap completion-at-point] 'company-complete)
+  (define-key company-mode-map [remap indent-for-tab-command] 'company-indent-or-complete-common)
   (setq company-dabbrev-minimum-length 2
         company-dabbrev-other-buffers t
         company-dabbrev-downcase nil))
