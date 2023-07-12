@@ -41,6 +41,12 @@
 (with-eval-after-load 'autorevert
   (diminish 'auto-revert-mode))
 
+
+(setq  auto-save-no-message t
+       remote-file-name-inhibit-auto-save-visited t)
+(add-hook 'after-init-hook 'auto-save-visited-mode)
+
+
 (add-hook 'after-init-hook 'transient-mark-mode)
 
 
