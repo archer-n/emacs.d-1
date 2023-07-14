@@ -115,6 +115,8 @@ typical word processor."
          "* NEXT %?\n%U\n" :clock-resume t)
         ("n" "note" entry (file "")
          "* %? :NOTE:\n%U\n%a\n" :clock-resume t)
+        ("s" "Slipbox" entry  (file ,(file-truename "~/org-roam/inbox.org"))
+         "* %?\n")
         ))
 
 

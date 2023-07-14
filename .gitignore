@@ -56,3 +56,4 @@ site-lisp/package/
 /eln-cache/
 /projects
 /tree-sitter/
+/org-roam.db
