@@ -105,5 +105,15 @@
     (add-hook (derived-mode-hook-name mode) 'add-node-modules-path)))
 
 
+
+;; lsp
+(add-hook 'js-mode-hook (lambda ()
+                          (setq-local tab-width 2)
+                          (eglot-ensure)))
+(add-hook 'js-ts-mode-hook 'eglot-ensure)
+(add-hook 'typescript-mode-hook 'eglot-ensure)
+
+(setq-default typescript-indent-level 2)
+
 (provide 'init-javascript)
 ;;; init-javascript.el ends here

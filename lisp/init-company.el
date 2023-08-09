@@ -1,4 +1,4 @@
-;;; init-corfu.el --- Interactive completion in buffers -*- lexical-binding: t -*-
+;;; init-company.el --- Interactive completion in buffers -*- lexical-binding: t -*-
 ;;; Commentary:
 ;;; Code:
 
@@ -38,4 +38,4 @@
 
 
 (provide 'init-company)
-;;; init-corfu.el ends here
+;;; init-company.el ends here
