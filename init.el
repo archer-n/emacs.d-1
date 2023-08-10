@@ -63,8 +63,8 @@
 (require 'init-recentf)
 (require 'init-minibuffer)
 (require 'init-hippie-expand)
-(require 'init-corfu)
-;; (require 'init-company)
+;;(require 'init-corfu)
+(require 'init-company)
 (require 'init-windows)
 (require 'init-sessions)
 (require 'init-mmm)
@@ -103,6 +103,7 @@
 (require 'init-wechat-miniprogram)
 (require 'init-plantuml)
 (require 'init-yasnippet)
+(require 'init-citre)
 (maybe-require-package 'nginx-mode)
 
 (require 'init-paredit)
