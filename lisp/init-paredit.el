@@ -17,7 +17,8 @@
   ;; Suppress certain paredit keybindings to avoid clashes, including
   ;; my global binding of M-?
   (dolist (binding '("RET" "C-<left>" "C-<right>" "C-M-<left>" "C-M-<right>" "M-s" "M-?"))
-    (define-key paredit-mode-map (read-kbd-macro binding) nil)))
+    (define-key paredit-mode-map (read-kbd-macro binding) nil))
+  (define-key paredit-mode-map (kbd "M-<up>") 'paredit-splice-sexp-killing-backward))
 
 
 
@@ -38,6 +39,7 @@
   (when (memq this-command paredit-minibuffer-commands)
     (enable-paredit-mode)))
 
+(add-hook 'sanityinc/lispy-modes-hook 'enable-paredit-mode)
 
 (provide 'init-paredit)
 ;;; init-paredit.el ends here
