@@ -34,8 +34,8 @@
     (global-set-key [remap switch-to-buffer-other-window] 'consult-buffer-other-window)
     (global-set-key [remap switch-to-buffer-other-frame] 'consult-buffer-other-frame)
     (global-set-key [remap goto-line] 'consult-goto-line)
-    (global-set-key (kbd "M-g l") 'consult-line)
-    (global-set-key (kbd "M-g i") 'consult-imenu)
+    (global-set-key (kbd "M-s /") 'consult-line)
+    (global-set-key (kbd "M-s i") 'consult-imenu)
 
 
 
