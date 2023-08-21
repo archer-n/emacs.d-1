@@ -127,7 +127,6 @@
            (treesit-available-p))
   (require 'init-treesitter))
 
-(require 'init-ledger)
 ;; Extra packages which don't require any configuration
 
 (require-package 'sudo-edit)
