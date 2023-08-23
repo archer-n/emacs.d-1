@@ -55,11 +55,16 @@
     (setq-default xref-js2-search-program 'rg))
   (defun sanityinc/enable-xref-js2 ()
     (add-hook 'xref-backend-functions #'xref-js2-xref-backend nil t))
+
   (with-eval-after-load 'js
     (define-key js-mode-map (kbd "M-.") nil)
-    (define-key js-ts-mode-map (kbd "M-.") nil)
     (add-hook 'js-mode-hook 'sanityinc/enable-xref-js2)
-    (add-hook 'js-ts-mode-hook 'sanityinc/enable-xref-js2))
+
+    (when (fboundp 'js-ts-mode)
+      (define-key js-ts-mode-map (kbd "M-.") nil)
+      (add-hook 'js-ts-mode-hook 'sanityinc/enable-xref-js2)))
+
+
 
   (with-eval-after-load 'js2-mode
     (define-key js2-mode-map (kbd "M-.") nil)
