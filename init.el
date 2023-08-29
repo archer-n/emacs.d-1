@@ -127,6 +127,7 @@
            (treesit-available-p))
   (require 'init-treesitter))
 
+(require 'init-beancount)
 ;; Extra packages which don't require any configuration
 
 (require-package 'sudo-edit)
