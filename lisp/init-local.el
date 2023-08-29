@@ -18,6 +18,10 @@
 (set-face-attribute 'default nil :height 110)
 
 
+;; alter
+(with-eval-after-load 'alert
+  (setq-default alert-default-style 'libnotify))
+
 (provide 'init-local)
 
 ;;; init-local.el ends here
