@@ -76,5 +76,18 @@
 (add-hook 'java-mode-hook 'java-eglot-ensure)
 (add-hook 'java-ts-mode-hook 'java-eglot-ensure)
 
+
+;; support for jar
+(when (maybe-require-package 'jarchive)
+  (add-hook 'after-init-hook 'jarchive-setup))
+
+
+;;; java decompiler
+;; https://github.com/xiongtx/jdecomp
+(when (maybe-require-package 'jdecomp)
+  (setq jdecomp-decompiler-type 'cfr)
+  (setq jdecomp-decompiler-paths `((cfr . ,(expand-file-name "plugins/cfr-0.152.jar" user-emacs-directory))))
+  (jdecomp-mode 1))
+
 (provide 'init-java)
 ;;; init-java.el ends here
