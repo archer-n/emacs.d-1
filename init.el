@@ -85,6 +85,7 @@
 (require 'init-textile)
 (require 'init-markdown)
 (require 'init-csv)
+(require 'init-c)
 (require 'init-dart)
 (require 'init-java)
 (require 'init-kotlin)
