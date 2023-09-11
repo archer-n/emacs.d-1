@@ -71,10 +71,11 @@
 
 
 (defun java-eglot-ensure ()
+  (interactive)
   (setq-local tab-width 4)
   (eglot-ensure))
-(add-hook 'java-mode-hook 'java-eglot-ensure)
-(add-hook 'java-ts-mode-hook 'java-eglot-ensure)
+;; (add-hook 'java-mode-hook 'java-eglot-ensure)
+;; (add-hook 'java-ts-mode-hook 'java-eglot-ensure)
 
 
 ;; support for jar
@@ -88,6 +89,31 @@
   (setq jdecomp-decompiler-type 'cfr)
   (setq jdecomp-decompiler-paths `((cfr . ,(expand-file-name "plugins/cfr-0.152.jar" user-emacs-directory))))
   (jdecomp-mode 1))
+
+
+
+;; search  file in gralde cache
+(defun wf/find-file-in-gradle-cache ()
+  (interactive)
+  (consult-find (expand-file-name "~/.gradle/caches/modules-2/files-2.1/")))
+
+(defun wf/find-file-in-aosp ()
+  (interactive)
+  (consult-find (expand-file-name "~/workspace/aosp/")))
+
+(defun wf/find-file-in-aosp-framework ()
+  (interactive)
+  (consult-find (expand-file-name "~/workspace/aosp/frameworks/")))
+
+(defun wf/find-android-jar ()
+  (interactive)
+  (find-file "~/Android/Sdk/platforms/android-33/android.jar"))
+
+(defvar wf/android-studio-cli "/opt/android-studio/bin/studio.sh")
+
+(defun wf/open-file-in-android-studio ()
+  (interactive)
+  (shell-command (concat wf/android-studio-cli " " (format "--line %d %s" (line-number-at-pos) buffer-file-name))))
 
 (provide 'init-java)
 ;;; init-java.el ends here

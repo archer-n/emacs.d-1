@@ -51,8 +51,9 @@
 (require-package 'command-log-mode)
 
 (require 'init-frame-hooks)
-;;(require 'init-themes)
+(require 'init-themes)
 (require 'init-gui-frames)
+
 (require 'init-dired)
 (require 'init-isearch)
 (require 'init-grep)

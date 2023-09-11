@@ -46,8 +46,7 @@
 (global-set-key (kbd "C-c n i") 'org-roam-node-insert)
 (global-set-key (kbd "C-c n c") 'org-roam-capture)
 
-
-(add-hook 'after-init-hook #'org-roam-db-autosync-mode)
+;; FIXME: (add-hook 'after-init-hook #'org-roam-db-autosync-mode)
 
 (provide 'init-org-roam)
 ;;; init-org-roam.el ends here

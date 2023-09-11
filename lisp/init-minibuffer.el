@@ -36,6 +36,7 @@
     (global-set-key [remap goto-line] 'consult-goto-line)
     (global-set-key (kbd "M-s /") 'consult-line)
     (global-set-key (kbd "M-s i") 'consult-imenu)
+    (global-set-key (kbd "M-s r") 'consult-recent-file)
 
 
 
