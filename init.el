@@ -51,7 +51,7 @@
 (require-package 'command-log-mode)
 
 (require 'init-frame-hooks)
-(require 'init-themes)
+;;(require 'init-themes)
 (require 'init-gui-frames)
 
 (require 'init-dired)
@@ -131,6 +131,8 @@
 
 (require 'init-beancount)
 ;; Extra packages which don't require any configuration
+
+(require 'init-pdf)
 
 (require-package 'sudo-edit)
 (require-package 'gnuplot)
