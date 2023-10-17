@@ -12,7 +12,7 @@
                              (setq-local web-mode-code-indent-offset 2)
                              (eglot-ensure)))
 
-  ;; Volar
+  ;; Volar - This configuration is not very easy to use and needs to be adjusted.
   (with-eval-after-load 'eglot
     (defun vue-eglot-init-options ()
       (let ((tsdk-path (expand-file-name
@@ -32,8 +32,9 @@
                                                 :documentSymbol t
                                                 :documentColor t)))))
     (add-to-list 'eglot-server-programs
-                 `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options))))))
-
+                 `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options)))
+                 ;;`((vue-mode typescript-mode typescript-ts-mode) . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options)))
+                 )))
 
 (provide 'init-vue)
 ;;; init-vue.el ends here

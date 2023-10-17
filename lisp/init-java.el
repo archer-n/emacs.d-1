@@ -74,8 +74,18 @@
   (interactive)
   (setq-local tab-width 4)
   (eglot-ensure))
-;; (add-hook 'java-mode-hook 'java-eglot-ensure)
-;; (add-hook 'java-ts-mode-hook 'java-eglot-ensure)
+
+(add-hook 'java-mode-hook 'java-eglot-ensure)
+(add-hook 'java-ts-mode-hook 'java-eglot-ensure)
+
+;; Android project java and kotlin code disable Eglot config:
+;;
+;; .dir-locals.el
+;;
+;; ((dart-mode . ((fill-column . 120)
+;;                (eglot-workspace-configuration
+;;                 . (:dart (:lineLength 120)))))
+;;  (nil . ((eglot-server-programs . ((java-mode java-ts-mode kotlin-mode kotlin-ts-mode) . (lambda () nil))))))
 
 
 ;; support for jar

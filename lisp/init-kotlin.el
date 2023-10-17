@@ -4,6 +4,8 @@
 
 (require-package 'kotlin-mode)
 
+(add-hook 'kotlin-mode-hook 'java-eglot-ensure)
+
 (use-package flymake-ktlint
   :ensure t
   :init

@@ -6,8 +6,7 @@
 (with-eval-after-load 'org
   (setq-default org-default-notes-file (concat org-directory "/inbox.org"))
   (setq-default org-agenda-files (list org-default-notes-file
-                                       (concat org-directory "/gtd.org")
-                                       (concat org-directory "/notes.org"))))
+                                       (concat org-directory "/gtd.org"))))
 
 
 ;;; svg
