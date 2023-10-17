@@ -35,13 +35,13 @@
   "Support extension uri."
   nil)
 
-(define-advice eglot--uri-to-path (:around (orig-fn uri) advice)
+(define-advice eglot-uri-to-path (:around (orig-fn uri) advice)
   "Support non standard LSP uri scheme."
   (when (keywordp uri) (setq uri (substring (symbol-name uri) 1)))
   (or (+eglot/ext-uri-to-path uri)
       (funcall orig-fn uri)))
 
-(define-advice eglot--path-to-uri (:around (orig-fn path) advice)
+(define-advice eglot-path-to-uri (:around (orig-fn path) advice)
   "Support non standard LSP uri scheme."
   (or (gethash path eglot-path-uri-cache)
       (funcall orig-fn path)))
