@@ -73,7 +73,12 @@
 (defun java-eglot-ensure ()
   (interactive)
   (setq-local tab-width 4)
-  (eglot-ensure))
+  (let ((isAndroid (string-match (rx (or (one-or-more "aosp")
+                                         (one-or-more "android")))
+                                 buffer-file-name)))
+    (message (format "%s => isAndroid: %s" buffer-file-name isAndroid) )
+    (if (not isAndroid)
+        (eglot-ensure))))
 
 (add-hook 'java-mode-hook 'java-eglot-ensure)
 (add-hook 'java-ts-mode-hook 'java-eglot-ensure)
