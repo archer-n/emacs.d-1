@@ -76,7 +76,6 @@
   (let ((isAndroid (string-match (rx (or (one-or-more "aosp")
                                          (one-or-more "android")))
                                  buffer-file-name)))
-    (message (format "%s => isAndroid: %s" buffer-file-name isAndroid) )
     (if (not isAndroid)
         (eglot-ensure))))
 
@@ -89,8 +88,7 @@
 ;;
 ;; ((dart-mode . ((fill-column . 120)
 ;;                (eglot-workspace-configuration
-;;                 . (:dart (:lineLength 120)))))
-;;  (nil . ((eglot-server-programs . ((java-mode java-ts-mode kotlin-mode kotlin-ts-mode) . (lambda () nil))))))
+;;                 . (:dart (:lineLength 120))))))
 
 
 ;; support for jar

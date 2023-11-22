@@ -50,49 +50,6 @@
         "KDic11万英汉词典"
         ))
 
-(require-package 'fanyi)
-;; Emacs 28+
-(setq read-extended-command-predicate #'command-completion-default-include-p)
-
-(defun kimim/sdcv-translate-result-advice (word dictionary-list)
-  (let* ((arguments
-          (cons word
-                (mapcan
-                 (lambda (d) (list "-u" d)) dictionary-list)))
-         (result (mapconcat
-                  (lambda (result)
-                    (let-alist result
-                      (format
-                       "## %s\n%s\n\n" .dict .definition)))
-                  (apply #'sdcv-call-process arguments)
-                  "")))
-    (if (string-empty-p result)
-        sdcv-fail-notify-string
-      result)))
-
-(advice-add 'sdcv-translate-result
-            :override
-            #'kimim/sdcv-translate-result-advice)
-
-(defun kimim/fanyi-dwim-add-sdcv (word)
-  (let ((buf (get-buffer fanyi-buffer-name)))
-    (with-current-buffer buf
-      (let ((inhibit-read-only t)
-            (inhibit-point-motion-hooks t))
-        ;; Clear the previous search result.
-        (point-max)
-        (insert "# SDCV\n\n")
-        (insert
-         (sdcv-search-with-dictionary
-          word sdcv-dictionary-complete-list))
-        (insert "\n\n")
-        (beginning-of-buffer)))))
-
-(advice-add 'fanyi-dwim :after
-            #'kimim/fanyi-dwim-add-sdcv)
-
-(global-set-key (kbd "M-s M-w") 'fanyi-dwim)
-
 (provide 'init-local)
 
 ;;; init-local.el ends here
