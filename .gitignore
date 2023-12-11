@@ -58,3 +58,4 @@ site-lisp/package/
 /projects
 /tree-sitter/
 /org-roam.db
+/forge-*.sqlite

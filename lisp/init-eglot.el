@@ -4,16 +4,13 @@
 
 ;;; Code:
 
-;; For Emacs >= 27
-(setq read-process-output-max (* 1024 1024))
-
-
 (when (maybe-require-package 'eglot)
   (maybe-require-package 'consult-eglot))
 
 (with-eval-after-load 'eglot
   (setq eglot-extend-to-xref t
         eglot-events-buffer-size 0))
+
 
 
 (add-hook 'eglot-managed-mode-hook (lambda ()

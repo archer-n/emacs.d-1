@@ -8,16 +8,12 @@
 (when (maybe-require-package 'flymake-flycheck)
   ;; Disable flycheck checkers for which we have flymake equivalents
   (with-eval-after-load 'flycheck
-    (setq-default flycheck-disabled-checkers
-                  (append (default-value 'flycheck-disabled-checkers)
-                          '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package))))
+    (setq-default
+     flycheck-disabled-checkers
+     (append (default-value 'flycheck-disabled-checkers)
+             '(emacs-lisp emacs-lisp-checkdoc emacs-lisp-package sh-shellcheck))))
 
-  (defun sanityinc/enable-flymake-flycheck ()
-    (setq-local flymake-diagnostic-functions
-                (seq-uniq (append flymake-diagnostic-functions
-                                  (flymake-flycheck-all-chained-diagnostic-functions)))))
-
-  (add-hook 'flymake-mode-hook 'sanityinc/enable-flymake-flycheck)
+  (add-hook 'flymake-mode-hook 'flymake-flycheck-auto)
   (add-hook 'prog-mode-hook 'flymake-mode)
   (add-hook 'text-mode-hook 'flymake-mode))
 
@@ -33,9 +29,7 @@
 
   (add-hook 'flymake-mode-hook
             (lambda ()
-              (setq eldoc-documentation-functions
-                    (cons 'flymake-eldoc-function
-                          (delq 'flymake-eldoc-function eldoc-documentation-functions))))))
+              (add-hook 'eldoc-documentation-functions 'flymake-eldoc-function nil t))))
 
 (provide 'init-flymake)
 ;;; init-flymake.el ends here
