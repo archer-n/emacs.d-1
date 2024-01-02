@@ -9,9 +9,10 @@
 
 (with-eval-after-load 'eglot
   (setq eglot-extend-to-xref t
-        eglot-events-buffer-size 0))
-
-
+        eglot-events-buffer-size 0
+        eglot-events-buffer-config (list :size 0
+                                         :format 'full)
+        ))
 
 (add-hook 'eglot-managed-mode-hook (lambda ()
                                      (local-set-key (kbd "M-RET") #'eglot-code-actions)))
