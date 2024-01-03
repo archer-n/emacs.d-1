@@ -108,6 +108,10 @@
   (dolist (mode '(typescript-mode js-mode js2-mode coffee-mode))
     (add-hook (derived-mode-hook-name mode) 'add-node-modules-path)))
 
+
+(when (fboundp 'eglot)
+  (add-hook 'js-mode-hook 'eglot-ensure)
+  (add-hook 'js-ts-mode-hook 'eglot-ensure))
 
 (provide 'init-javascript)
 ;;; init-javascript.el ends here
