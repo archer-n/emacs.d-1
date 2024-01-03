@@ -1,0 +1,121 @@
+;;; init-beancount.el --- Beancount support -*- lexical-binding: t -*-
+;;; Commentary:
+;;; Code:
+
+(require 'beancount)
+;; (require 'flymake-bean-check)
+
+;; Automatically open .beancount files in beancount-mode.
+(add-to-list 'auto-mode-alist '("\\.beancount$" . beancount-mode))
+
+
+;; Support parsing Python logging errors, with a suitable logging.basicConfig()
+;; format.
+(unless (assq 'python-logging compilation-error-regexp-alist-alist)
+
+  (add-to-list
+   'compilation-error-regexp-alist-alist
+   '(python-logging "\\(ERROR\\|WARNING\\):\\s-*\\([^:]+\\):\\([0-9]+\\)\\s-*:" 2 3))
+
+  (add-to-list
+   'compilation-error-regexp-alist 'python-logging)
+  )
+
+
+;; Experimental: Bind a key to reformat the entire file using bean-format.
+(defun beancount-format-file ()
+  (interactive)
+  (let ((line-no (line-number-at-pos)))
+    (call-process-region (point-min) (point-max) "bean-format" t (current-buffer))
+    (goto-line line-no)
+    (recenter)
+    ))
+
+                                        ;(define-key* beancount-mode-map [(control c)(F)] 'beancount-format-file)
+
+;; Make sure we don't accidentally pick up ;;; as headers. Use org section headers only.
+(setq beancount-outline-regexp "\\(\\*+\\)")
+
+;; Automatically enable outline-mode.
+(add-hook 'beancount-mode-hook #'outline-minor-mode)
+
+;; Add movement between sections.
+(define-key beancount-mode-map [(control c)(control n)] #'outline-next-visible-heading)
+(define-key beancount-mode-map [(control c)(control p)] #'outline-previous-visible-heading)
+(define-key beancount-mode-map [(control c)(control u)] #'outline-up-heading)
+
+;; Selectively restore old-style keybindings.
+;;
+;; If you want all the old (pre-issue-#1) keybindings, then set
+;; `beancount-mode-old-style-keybindings' in your Emacs configuration
+;; to restore them en masse.  Or, to restore just certain bindings,
+;; uncomment selected lines below:
+;;
+;; (define-key beancount-mode-map [(control c)(control g)] #'beancount-transaction-clear)
+;; (define-key beancount-mode-map [(control c)(l)] #'beancount-check)
+;; (define-key beancount-mode-map [(control c)(q)] #'beancount-query)
+;; (define-key beancount-mode-map [(control c)(x)] #'beancount-context)
+;; (define-key beancount-mode-map [(control c)(k)] #'beancount-linked)
+;; (define-key beancount-mode-map [(control c)(r)] #'beancount-region-default)
+;; (define-key beancount-mode-map [(control c)(t)] #'beancount-region-value)
+;; (define-key beancount-mode-map [(control c)(y)] #'beancount-region-cost)
+;; (define-key beancount-mode-map [(control c)(p)] #'beancount-insert-prices)
+
+;; Disable auto-indent.
+
+(defun disable-electric-indent ()
+  (setq-local electric-indent-chars nil))
+(add-hook 'beancount-mode-hook #'disable-electric-indent)
+
+;; `beancount-number-alignment-column`. Setting it to 0 will cause the
+;; alignment column to be determined from file content.  Postings in
+;; transactions are indented with `beancount-transaction-indent` spaces.
+
+(defadvice shell-quote-argument (around dont-quote-already-quoted-args activate)
+  "Avoid quoting argument if it's already quoted."
+  (let ((arg (ad-get-arg 0)))
+    (setq ad-return-value
+          (if (or (string-match "\".*\"$" arg)
+                  (string-match "\'.*\'$" arg))
+              arg ad-do-it))))
+
+(defvar beancount-journal-command
+  (concat
+   "select date, flag, maxwidth(description, 80), position, balance "
+   "where account = '%s'"))
+
+(defun beancount-query-journal-at-point ()
+  "Run a journal command for the account at point."
+  (interactive)
+  (let* ((account (thing-at-point 'beancount-account))
+         (sql (concat "\"" (format beancount-journal-command account) "\"")))
+    (beancount--run beancount-query-program
+                    (file-relative-name buffer-file-name)
+                    sql)))
+
+(define-key beancount-mode-map [(control c)(j)] #'beancount-query-journal-at-point)
+
+
+;; TODO: Refine this a bit later on.
+(defvar beancount-balance-command
+  (concat
+   "select account, sum(position) "
+   "where account ~ '%s' "
+   "group by 1 "
+   "order by 1"))
+
+(defun beancount-query-balance-at-point ()
+  "Run a balance command for the account at point."
+  (interactive)
+  (let* ((account (thing-at-point 'beancount-account))
+         (sql (concat "\"" (format beancount-balance-command account) "\"")))
+    (beancount--run beancount-query-program
+                    (file-relative-name buffer-file-name)
+                    sql)))
+
+(define-key beancount-mode-map [(control c)(shift j)] #'beancount-query-balance-at-point)
+
+;; (add-hook 'beancount-mode-hook #'flymake-bean-check-enable)
+
+(provide 'init-beancount)
+;;; init-beancount.el ends here

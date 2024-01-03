@@ -146,6 +146,7 @@
 (require 'init-dash)
 
 (require 'init-ledger)
+(require 'init-beancount)
 (require 'init-lua)
 (require 'init-uiua)
 (require 'init-terminals)
