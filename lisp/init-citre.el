@@ -16,5 +16,9 @@
 ;; https://github.com/universal-ctags/citre/blob/master/docs/user-manual/citre-global.md
 (setq xref-prompt-for-identifier nil)
 
+(add-hook 'citre-mode-hook (lambda () (interactive "")
+                             (setq-local company-backends '((company-keywords company-capf company-dabbrev-code :with company-yasnippet)))))
+
+
 (provide 'init-citre)
 ;;; init-citre.el ends here

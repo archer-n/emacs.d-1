@@ -30,9 +30,22 @@
   (global-set-key (kbd "M-s r") 'consult-recent-file))
 
 
+;; python
+(add-hook 'python-mode-hook #'eglot-ensure)
+
+
+;; yasnippet
+(require-package 'yasnippet)
+(add-hook 'after-init-hook (lambda ()
+                             (yas-global-mode 1)))
+(require-package 'yasnippet-snippets)
+
+
 ;; andorid
 
 ;; support for jar
+(with-eval-after-load 'jarchive
+  (diminish 'jarchive-mode))
 (when (maybe-require-package 'jarchive)
   (add-hook 'after-init-hook 'jarchive-setup))
 

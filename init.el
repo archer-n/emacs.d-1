@@ -73,7 +73,7 @@
 (require 'init-recentf)
 (require 'init-minibuffer)
 (require 'init-hippie-expand)
-(require 'init-corfu)
+(require 'init-company)
 (require 'init-windows)
 (require 'init-sessions)
 (require 'init-mmm)
@@ -97,6 +97,7 @@
 (require 'init-c)
 (require 'init-java)
 (require 'init-kotlin)
+(require 'init-dart)
 (require 'init-javascript)
 (require 'init-react)
 (require 'init-php)
@@ -105,6 +106,7 @@
 (require 'init-nxml)
 (require 'init-html)
 (require 'init-css)
+(require 'init-vue)
 (require 'init-haml)
 (require 'init-http)
 (require 'init-python)
@@ -150,6 +152,7 @@
 (require 'init-lua)
 (require 'init-uiua)
 (require 'init-terminals)
+(require 'init-pdf)
 
 ;; Extra packages which don't require any configuration
 
