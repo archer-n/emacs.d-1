@@ -22,6 +22,12 @@
 (with-eval-after-load 'alert
   (setq-default alert-default-style 'libnotify))
 
+;; org-pomodoro 的通知默认不消失，需要手动点击
+(with-eval-after-load 'org-pomodoro
+  (defun org-pomodoro-notify (title message)
+    "Send a notification with TITLE and MESSAGE using `alert'."
+    (alert message :title title :category 'org-pomodoro :persistent t)))
+
 
 ;;consult
 (when (maybe-require-package 'consult)
