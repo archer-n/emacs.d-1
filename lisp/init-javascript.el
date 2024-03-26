@@ -86,7 +86,9 @@
 
 (when (fboundp 'eglot)
   (add-hook 'js-mode-hook 'eglot-ensure)
-  (add-hook 'js-ts-mode-hook 'eglot-ensure))
+  (add-hook 'js-ts-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-mode-hook 'eglot-ensure)
+  (add-hook 'typescript-ts-mode-hook 'eglot-ensure))
 
 (provide 'init-javascript)
 ;;; init-javascript.el ends here

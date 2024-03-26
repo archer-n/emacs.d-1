@@ -13,28 +13,18 @@
                              (eglot-ensure)))
 
   ;; Volar - This configuration is not very easy to use and needs to be adjusted.
-  (with-eval-after-load 'eglot
-    (defun vue-eglot-init-options ()
-      (let ((tsdk-path (expand-file-name
-                        "lib"
-                        (string-trim-right (shell-command-to-string "npm list --global --parseable typescript | head -n1")))))
-        `(:typescript (:tsdk ,tsdk-path
-                             :languageFeatures (:completion
-                                                (:defaultTagNameCase "both"
-                                                                     :defaultAttrNameCase "kebabCase"
-                                                                     :getDocumentNameCasesRequest nil
-                                                                     :getDocumentSelectionRequest nil)
-                                                :diagnostics
-                                                (:getDocumentVersionRequest nil))
-                             :documentFeatures (:documentFormatting
-                                                (:defaultPrintWidth 100
-                                                                    :getDocumentPrintWidthRequest nil)
-                                                :documentSymbol t
-                                                :documentColor t)))))
-    (add-to-list 'eglot-server-programs
-                 `(vue-mode . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options)))
-                 ;; `((vue-mode typescript-mode typescript-ts-mode) . ("vue-language-server" "--stdio" :initializationOptions ,(vue-eglot-init-options)))
-                 )))
+  ;;
+  ;; @see Typescript plugin for the language server. - https://github.com/vuejs/language-tools/tree/master/packages/typescript-plugin
+  ;;
+  ;; typescript@5.4.3
+  ;; typescript-language-server@3.3.1
+  ;; @vue/typescript-plugin@2.0.7
+  ;; @vue/language-server@2.0.7
+  ;;
+  (add-to-list 'eglot-server-programs
+               `(vue-mode . ("typescript-language-server" "--stdio" :initializationOptions
+                             (:plugins [(:name "@vue/typescript-plugin" :location ,(string-trim-right (shell-command-to-string "npm list --global --parseable @vue/typescript-plugin | head -n1")) :languages ["vue"])])))))
+
 
 (provide 'init-vue)
 ;;; init-vue.el ends here
