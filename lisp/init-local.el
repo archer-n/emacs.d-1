@@ -11,11 +11,16 @@
 
 
 ;;; svg
-(add-hook 'after-init-hook 'auto-image-file-mode)
+;;(add-hook 'after-init-hook 'auto-image-file-mode)
 
 
 ;; 设置字体大小
 ;; (set-face-attribute 'default nil :height 110)
+
+
+;; imenu
+(with-eval-after-load 'imenu
+  (setq imenu-max-item-length "Unlimited"))
 
 
 ;; alter
@@ -75,6 +80,22 @@
 (defun wf/open-file-in-android-studio ()
   (interactive)
   (shell-command (concat "/opt/android-studio/bin/studio.sh" " " (format "--line %d %s" (line-number-at-pos) buffer-file-name))))
+
+
+
+;;; moonshot - kimi
+(use-package gptel
+  :ensure t
+  :config
+  (setq gptel-model "moonshot-v1-8k")
+  (setq gptel-default-mode 'org-mode)
+  (setq gptel-backend
+        (gptel-make-openai "Moonshot"
+          :key 'gptel-api-key
+          :models '("moonshot-v1-8k"
+                    "moonshot-v1-32k"
+                    "moonshot-v1-128k")
+          :host "api.moonshot.cn")))
 
 (provide 'init-local)
 
