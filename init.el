@@ -45,7 +45,7 @@
 
 ;; General performance tuning
 (when (require-package 'gcmh)
-  (setq gcmh-high-cons-threshold (* 128 1024 1024))
+  (setq gcmh-high-cons-threshold #x200000000) ;; 8G
   (add-hook 'after-init-hook (lambda ()
                                (gcmh-mode)
                                (diminish 'gcmh-mode))))
