@@ -63,8 +63,9 @@
 ;;; java decompiler
 ;; https://github.com/xiongtx/jdecomp
 (when (maybe-require-package 'jdecomp)
-  (setq jdecomp-decompiler-type 'cfr)
-  (setq jdecomp-decompiler-paths `((cfr . ,(expand-file-name "plugins/cfr-0.152.jar" user-emacs-directory))))
+  (setq jdecomp-decompiler-type 'fernflower)
+  (setq jdecomp-decompiler-paths `((cfr . ,(expand-file-name "plugins/cfr-0.152.jar" user-emacs-directory))
+                                   (fernflower . ,(expand-file-name "plugins/java-decompiler.jar" user-emacs-directory))))
   (jdecomp-mode 1))
 
 ;; search  file in gralde cache
@@ -75,7 +76,6 @@
 (defun wf/find-android-jar ()
   (interactive)
   (find-file "~/Android/Sdk/platforms/android-33/android.jar"))
-
 
 (defun wf/open-file-in-android-studio ()
   (interactive)
