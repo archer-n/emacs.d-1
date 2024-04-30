@@ -41,10 +41,10 @@
   (or (+eglot/ext-uri-to-path uri)
       (funcall orig-fn uri)))
 
-(define-advice eglot-path-to-uri (:around (orig-fn path) advice)
+(define-advice eglot-path-to-uri (:around (orig-fn &rest args) advice)
   "Support non standard LSP uri scheme."
-  (or (gethash path eglot-path-uri-cache)
-      (funcall orig-fn path)))
+  (or (gethash (car args) eglot-path-uri-cache)
+      (apply orig-fn args)))
 
 (defun +eglot/jdtls-uri-to-path (uri)
   "Support Eclipse jdtls `jdt://' uri scheme."
